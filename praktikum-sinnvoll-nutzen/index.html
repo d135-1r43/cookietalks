@@ -1,0 +1,1001 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ein Praktikum in der Softwareentwicklung sinnvoll nutzen · Markus Herhoffer</title>
+<!-- Fallback-Schriften, falls Neue DIN (Adobe Fonts) auf dem Rechner nicht aktiviert ist -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600&family=Saira:wght@500;600;700&display=swap">
+<style>
+/* ---------- Schriften: Neue DIN über Adobe Fonts (lokal aktiviert) ---------- */
+@font-face{font-family:"EXP Display";font-weight:500;src:local("NeueDIN-SemiWideMedium"),local("Neue DIN SemiWide Medium")}
+@font-face{font-family:"EXP Display";font-weight:600;src:local("NeueDIN-SemiWideSemiBold"),local("Neue DIN SemiWide SemiBold")}
+@font-face{font-family:"EXP Display";font-weight:700;src:local("NeueDIN-SemiWideBold"),local("Neue DIN SemiWide Bold")}
+@font-face{font-family:"EXP Text";font-weight:300;src:local("NeueDIN-Light"),local("Neue DIN Light")}
+@font-face{font-family:"EXP Text";font-weight:400;src:local("NeueDIN-Regular"),local("Neue DIN Regular")}
+@font-face{font-family:"EXP Text";font-weight:500;src:local("NeueDIN-Medium"),local("Neue DIN Medium")}
+@font-face{font-family:"EXP Text";font-weight:600;src:local("NeueDIN-SemiBold"),local("Neue DIN SemiBold")}
+
+/* ---------- CI ---------- */
+:root{
+  --o:#FF8200; --o2:#D96E00; --n:#141414; --card:#F2F2F2; --tint:#FFF1E3;
+  --g:#555555; --g2:#BDBDBD; --g3:#8C8C8C;
+  --fd:"EXP Display","Saira",Arial,sans-serif;
+  --ft:"EXP Text","Barlow",Arial,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#000;overflow:hidden}
+body{font-family:var(--ft);font-weight:300;color:#fff;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+b,strong{font-weight:500}
+.hl{color:var(--o)}
+
+/* ---------- Bühne ---------- */
+#stage{position:fixed;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0}
+.slide{position:absolute;inset:0;overflow:hidden;opacity:0;visibility:hidden;transition:opacity .55s ease,visibility 0s linear .55s}
+.slide.active{opacity:1;visibility:visible;transition:opacity .55s ease}
+.dark{background:#141414;color:#fff}
+.light{background:#fff;color:var(--n)}
+.a{position:absolute}
+.d{font-family:var(--fd);font-weight:500}
+.eyebrow{position:absolute;left:60px;top:56px;font:500 30px/1.2 var(--fd);color:var(--o)}
+.title{position:absolute;left:60px;top:98px;width:1800px;font:300 60px/1.1 var(--ft)}
+.logo{position:absolute;left:60px;bottom:56px;width:90px;height:30px}
+.light .logo,.light .pn{color:var(--n)}
+.dark .logo,.dark .pn{color:#fff}
+.pn{position:absolute;right:60px;bottom:48px;width:120px;text-align:right;font:500 32px/1 var(--fd)}
+.notes{display:none}
+.slide svg{overflow:visible}
+.illu{-webkit-mask-image:linear-gradient(to bottom,#000 78%,transparent 100%),linear-gradient(to right,transparent 0%,#000 7%,#000 93%,transparent 100%);-webkit-mask-composite:source-in;mask-image:linear-gradient(to bottom,#000 78%,transparent 100%),linear-gradient(to right,transparent 0%,#000 7%,#000 93%,transparent 100%);mask-composite:intersect}
+.ic{fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+/* ---------- Builds ---------- */
+[data-step],[data-auto]{opacity:0;transition:opacity .6s ease,transform .8s cubic-bezier(.16,.84,.24,1)}
+[data-fx=rise]{transform:translateY(48px)}
+[data-fx=left]{transform:translateX(-80px)}
+[data-fx=right]{transform:translateX(80px)}
+[data-fx=drop]{transform:translateY(-90px)}
+[data-fx=pop]{transform:scale(.82)}
+[data-fx=scale]{transform:scale(.93)}
+.shown{opacity:1!important;transform:none!important}
+.noanim,.noanim *{transition:none!important}
+.kb{transform-origin:60% 40%}
+.active .kb{animation:kb 22s ease-out forwards}
+@keyframes kb{from{transform:scale(1)}to{transform:scale(1.09)}}
+
+/* ---------- Kapitel ---------- */
+.sec-top{left:820px;top:0;width:280px;height:280px;background:var(--o);display:flex;align-items:center;justify-content:center;font:500 150px/1 var(--fd);color:#fff}
+.sec-title{left:96px;top:430px;width:1728px;text-align:center;font:500 150px/1.05 var(--fd);color:#fff;letter-spacing:1px}
+.sec-sub{left:96px;top:640px;width:1728px;text-align:center;font:300 40px/1.3 var(--ft)}
+.sec-bot{left:820px;top:945px;width:280px;height:135px;background:var(--o)}
+
+/* ---------- Komponenten ---------- */
+.qcard{position:absolute;top:270px;width:420px;height:640px;background:var(--card);border-radius:28px;overflow:hidden;display:flex;flex-direction:column}
+.qcard .q{background:var(--n);height:250px;padding:40px 36px;display:flex;align-items:center;font:500 38px/1.2 var(--fd);color:var(--o)}
+.qcard .b{flex:1;padding:36px;font-size:31px;line-height:1.35;color:#3A3A3A}
+.qcard .f{background:var(--o);padding:26px;text-align:center;font:500 32px var(--fd);color:#fff}
+.row-ic{position:absolute;display:flex;align-items:center;gap:48px;font-size:42px;line-height:1.25}
+.row-ic .ic{width:110px;height:110px;color:var(--o);stroke-width:1.2}
+.lst{position:absolute;left:1230px;width:630px;border-left:6px solid var(--o);padding:8px 0 8px 28px;font-size:36px}
+.colhead{position:absolute;top:250px;display:flex;align-items:center;gap:16px;font:500 36px var(--fd)}
+.colhead .ic{width:46px;height:46px}
+.pc,.cc{position:absolute;width:870px;border-radius:0 16px 16px 0;padding:20px 28px;display:flex;align-items:center;gap:22px;font-size:31px;line-height:1.3;color:var(--n)}
+.pc{left:60px;background:var(--tint);border-left:8px solid var(--o)}
+.cc{left:990px;background:var(--card);border-left:8px solid var(--n)}
+.pc .ic{width:40px;height:40px;color:var(--o2);stroke-width:2.4}
+.cc .ic{width:40px;height:40px;color:var(--n)}
+.chips{display:flex;flex-wrap:wrap;gap:14px}
+.chip{font-size:27px;border:2px solid var(--o);border-radius:40px;padding:8px 22px}
+.cap{font:500 26px var(--fd);letter-spacing:2px}
+.phase{position:absolute;top:390px;height:300px;background:var(--card);border-top:8px solid var(--o);border-radius:0 0 20px 20px;padding:24px 26px;display:flex;flex-direction:column;gap:8px}
+.phase .w{font-size:25px;font-weight:500;color:var(--o2)}
+.phase h3{font:500 32px var(--fd)}
+.phase p{font-size:25px;line-height:1.35;color:var(--g)}
+.pill{position:absolute;width:230px;text-align:center;white-space:nowrap;font-size:27px;font-weight:500;color:var(--n);background:#fff;border:3px solid var(--n);border-radius:40px;padding:8px 12px}
+.pill.o{background:var(--o);border-color:var(--o);color:#fff}
+.ph{position:absolute;top:130px;width:860px;height:800px;border:3px dashed var(--o);border-radius:28px;background:#1F1F1F;padding:56px;display:flex;flex-direction:column;justify-content:center;gap:22px}
+.ph .ic{width:64px;height:64px;color:var(--o)}
+.ph-label{font:500 26px var(--fd);letter-spacing:3px;color:var(--o)}
+.ph-prompt{font-size:26px;line-height:1.42;color:var(--g2);user-select:all;cursor:text}
+.who{position:absolute;top:300px;width:860px;display:flex;flex-direction:column;gap:40px}
+.who h2{font:300 78px/1.1 var(--ft)}
+.who p{font-size:35px;line-height:1.35;color:var(--g2)}
+.decide{position:absolute;left:60px;width:1800px;background:var(--card);border-radius:16px;padding:20px 24px 20px 36px;display:flex;align-items:center;justify-content:space-between;gap:32px;font-size:33px}
+.badge{flex:none;width:290px;text-align:center;font:500 28px var(--fd);border-radius:40px;padding:12px 20px}
+.badge.A{background:var(--o);color:var(--n)}
+.badge.B{background:var(--n);color:#fff}
+.rule{position:absolute;width:580px;height:310px;background:var(--card);border-radius:24px;padding:32px 36px;display:flex;flex-direction:column;gap:10px}
+.rule .no{font:500 72px/1 var(--fd);color:var(--o)}
+.rule h3{font:500 34px var(--fd)}
+.rule p{font-size:28px;line-height:1.35;color:var(--g)}
+.rule.dk{background:var(--n);color:#fff}
+.rule.dk p{color:#D6D6D6}
+.story{position:absolute;left:60px;width:860px;padding:8px 0 8px 32px;display:flex;flex-direction:column;gap:8px}
+.story .nm{font:500 30px var(--fd)}
+.story p{font-size:33px;line-height:1.35}
+.svgl{font-family:var(--ft);font-weight:500;font-size:28px;fill:#fff}
+.svgs{font-family:var(--ft);font-weight:300;font-size:26px;fill:var(--g3)}
+.num{display:flex;align-items:center;justify-content:center;flex:none;width:54px;height:54px;border-radius:50%;background:var(--o);color:var(--n);font:500 30px var(--fd)}
+
+/* SVG-Loops */
+.bob{animation:bob 5s ease-in-out infinite alternate}
+@keyframes bob{to{transform:translateY(10px)}}
+.wave{animation:wave 6s linear infinite}
+@keyframes wave{to{transform:translateX(-200px)}}
+.wave2{animation:wave2 9s linear infinite}
+@keyframes wave2{to{transform:translateX(200px)}}
+.ray{animation:ray 7s ease-in-out infinite alternate}
+.ray.r2{animation-duration:9s;animation-delay:-3s}.ray.r3{animation-duration:8s;animation-delay:-5s}.ray.r4{animation-duration:11s;animation-delay:-2s}
+@keyframes ray{from{opacity:.25}to{opacity:1}}
+.bub{animation:bub 7s linear infinite;transform-box:fill-box}
+.bub.b2{animation-delay:-1.2s;animation-duration:8s}.bub.b3{animation-delay:-2.7s}.bub.b4{animation-delay:-4.1s;animation-duration:6s}.bub.b5{animation-delay:-5.3s;animation-duration:9s}.bub.b6{animation-delay:-3.5s;animation-duration:7.5s}
+@keyframes bub{0%{transform:translate(0,0);opacity:0}12%{opacity:.8}50%{transform:translate(8px,-200px)}88%{opacity:.5}100%{transform:translate(-4px,-430px);opacity:0}}
+.twinkle{transform-box:fill-box;transform-origin:center;animation:tw 2.6s ease-in-out infinite}
+@keyframes tw{0%,100%{transform:scale(.4) rotate(0deg);opacity:.3}50%{transform:scale(1) rotate(45deg);opacity:1}}
+.glow{animation:glow 3s ease-in-out infinite alternate}
+@keyframes glow{from{opacity:.35}to{opacity:1}}
+.flow{stroke-dasharray:2 26;animation:flow .7s linear infinite}
+@keyframes flow{to{stroke-dashoffset:-28}}
+.pulse{transform-box:fill-box;transform-origin:center;animation:pulse 1.6s ease-out infinite}
+@keyframes pulse{from{transform:scale(1);opacity:1}to{transform:scale(2.8);opacity:0}}
+.prog{stroke-dasharray:1780;animation:prog 9s ease-in-out infinite}
+@keyframes prog{0%{stroke-dashoffset:1780}80%,100%{stroke-dashoffset:0}}
+.dot{animation:dot 9s ease-in-out infinite}
+@keyframes dot{0%{transform:translateX(0)}80%,100%{transform:translateX(1780px)}}
+.spin{transform-origin:350px 350px;animation:spin 9s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.breathe{transform-origin:350px 350px;animation:br 3s ease-in-out infinite alternate}
+@keyframes br{from{transform:scale(.94)}to{transform:scale(1.04)}}
+
+/* ---------- Overlays ---------- */
+#black{position:fixed;inset:0;background:#000;z-index:50;display:none}
+#notesbar{position:fixed;left:0;right:0;bottom:0;max-height:40vh;overflow:auto;background:rgba(20,20,20,.96);color:#fff;font:300 20px/1.45 var(--ft);padding:18px 28px;z-index:40;display:none;border-top:3px solid var(--o)}
+#help{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.8);z-index:60}
+#help div{background:#fff;color:var(--n);border-radius:16px;padding:32px 40px;font:300 20px/1.7 var(--ft);min-width:420px}
+#help b{display:inline-block;min-width:150px;font-family:var(--fd)}
+body.show-notes #notesbar,body.show-help #help{display:flex}
+body.show-notes #notesbar{display:block}
+body.blackout #black{display:block}
+body.cursor-hidden{cursor:none}
+
+/* ---------- Presenter-Ansicht (?presenter) ---------- */
+#presenter{display:none}
+body.presenter{background:#1A1A1A}
+body.presenter #presenter{display:grid;position:fixed;inset:0;grid-template-columns:minmax(0,62fr) minmax(0,38fr);grid-template-rows:auto 1fr;gap:20px;padding:20px;font-family:var(--ft);color:#fff}
+#p-cur{grid-row:1/3;position:relative;border:1px solid #3A3A3A}
+#p-side{display:flex;flex-direction:column;gap:16px;min-height:0}
+#p-next{position:relative;aspect-ratio:16/9;width:100%;overflow:hidden;background:#000;border:1px solid #3A3A3A}
+#p-next .mini{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0}
+#p-meta{display:flex;justify-content:space-between;align-items:baseline;font:500 22px var(--fd)}
+#p-timer{font:500 44px var(--fd);color:var(--o);cursor:pointer}
+#p-notes{flex:1;overflow:auto;font:300 24px/1.5 var(--ft);background:#141414;border-radius:12px;padding:20px 24px}
+#p-next .nextbuild{outline:8px solid var(--o);outline-offset:10px;box-shadow:0 0 0 18px rgba(255,130,0,.25);border-radius:6px}
+#p-notes ul,#notesbar ul{padding-left:1.1em;margin:0}
+#p-notes li,#notesbar li{margin:.3em 0}
+#p-notes li::marker,#notesbar li::marker{color:var(--o)}
+#p-notes b,#notesbar b{color:var(--o);font-weight:500}
+.p-lbl{font:500 16px var(--fd);letter-spacing:2px;color:var(--g3);text-transform:uppercase}
+
+/* ---------- Druck / PDF-Export ---------- */
+@media print{
+  @page{size:1920px 1080px;margin:0}
+  html,body{overflow:visible;height:auto;background:#fff}
+  #stage{position:static;transform:none!important}
+  .slide{position:relative;opacity:1!important;visibility:visible!important;page-break-after:always;break-after:page}
+  [data-step],[data-auto]{opacity:1!important;transform:none!important}
+  .kb{animation:none!important}
+  #notesbar,#help,#black,#presenter{display:none!important}
+}
+</style>
+</head>
+<body>
+
+<!-- ======== Symbole: Logo & Icons ======== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="exp-logo" viewBox="8 86.5 157.3 52.8"><g fill="currentColor"><path d="M46.7,130.3H27.2l0,0H12.2c-2.4,0-4.2,1.9-4.2,4.2l0,0c0,1.2,0.4,2.3,1.2,3c0.8,0.8,1.8,1.2,3,1.2h34.5 c1.1,0,2.1-0.4,3-1.2c0.9-0.8,1.3-1.8,1.3-3c0-1.2-0.4-2.3-1.3-3C48.9,130.7,47.9,130.3,46.7,130.3z"/><path d="M46.7,108.3H27.2l0,0H12.2c-2.4,0-4.2,1.9-4.2,4.2l0,0c0,1.2,0.4,2.3,1.2,3c0.8,0.8,1.8,1.2,3,1.2h34.5 c1.1,0,2.1-0.4,3-1.2c0.9-0.8,1.3-1.8,1.3-3c0-1.2-0.4-2.3-1.3-3C48.9,108.7,47.9,108.3,46.7,108.3z"/><path d="M27.2,94.8L27.2,94.8h19.6c1.1,0,2.1-0.4,3-1.2c0.9-0.8,1.3-1.8,1.3-3s-0.4-2.3-1.3-3 c-0.9-0.8-1.8-1.2-3-1.2H12.2c-1.2,0-2.3,0.4-3,1.2c-0.8,0.8-1.2,1.8-1.2,3l0,0c0,2.4,1.9,4.2,4.2,4.2H27.2z"/><path d="M69.6,139.1c-0.9,0-1.8-0.3-2.7-0.9c-0.9-0.8-1.5-1.7-1.6-2.9c-0.1-1.2,0.2-2.2,0.9-3.2l15.1-19.2 L66.2,93.7c-0.8-0.9-1.1-2-0.9-3.2c0.1-1.2,0.7-2.1,1.6-2.9c0.9-0.8,2-1.1,3.2-0.9c1.2,0.1,2.1,0.7,2.9,1.6L86.7,106l13.9-17.7 c0.8-0.9,1.7-1.5,2.8-1.6c1.1-0.1,2.2,0.2,3.1,0.9c0.9,0.8,1.5,1.7,1.6,2.9c0.1,1.2-0.2,2.2-0.9,3.2l-15,19.2l15,19.2 c0.8,0.9,1.1,2,0.9,3.2s-0.7,2.2-1.6,2.9c-0.9,0.8-2,1.1-3.1,0.9c-1.1-0.1-2.1-0.7-2.8-1.6l-13.9-17.7L73,137.5 C72.1,138.6,71,139.1,69.6,139.1z"/><path d="M164,96c-0.8-1.8-1.9-3.4-3.3-4.8c-1.4-1.4-3-2.5-4.9-3.3c-1.8-0.8-3.8-1.2-5.9-1.2h-23.3 c-1.2,0-2.2,0.4-3,1.2c-0.8,0.8-1.2,1.8-1.2,3l0,0l0,0l0,0c0,2.3,1.9,4.2,4.2,4.2h4.2h11.7h7.3c1.9,0,3.5,0.6,4.7,1.9 c1.3,1.3,1.9,2.8,1.9,4.7c0,1.9-0.6,3.5-1.9,4.8c-1.3,1.3-2.8,2-4.7,2h-7.3h-11.7l0,0c-4.7,0-8.5,3.8-8.5,8.5v17.7 c0,1.2,0.4,2.2,1.2,3c0.8,0.8,1.8,1.2,3,1.2c1.2,0,2.2-0.4,3-1.2c0.8-0.8,1.2-1.8,1.2-3V119c0-1,0.8-1.8,1.8-1.8h17.2 c2.1,0,4-0.4,5.9-1.2c1.8-0.8,3.5-1.9,4.9-3.3c1.4-1.4,2.5-3,3.3-4.8c0.8-1.8,1.2-3.8,1.2-6C165.2,99.8,164.8,97.9,164,96z"/></g></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></symbol>
+  <symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 3.5L22 20H2z"/><path d="M12 10v4.5"/><path d="M12 17.3v.2"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24"><path d="M7 10v10H3V10z"/><path d="M7 10l4-7c1.7 0 2.7 1.2 2.4 2.8L12.8 9H19a2 2 0 0 1 2 2.3l-1.3 7a2 2 0 0 1-2 1.7H7"/></symbol>
+  <symbol id="i-building" viewBox="0 0 24 24"><rect x="6" y="3" width="12" height="18" rx="1"/><path d="M9.5 7h1M13.5 7h1M9.5 10.5h1M13.5 10.5h1M9.5 14h1M13.5 14h1M10.5 21v-3h3v3"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.5 2.7-6 6-6s6 2.5 6 6"/><circle cx="17" cy="9" r="2.6"/><path d="M15.5 14.3c3 .1 5.5 2.4 5.5 5.7"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-7-6.5-7-11.5a7 7 0 0 1 14 0C19 14.5 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.6"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1.2"/><path d="M12 1.5v4M12 18.5v4M1.5 12h4M18.5 12h4"/></symbol>
+  <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></symbol>
+</svg>
+
+<div id="stage">
+
+<!-- ================= 1 · TITEL ================= -->
+<section class="slide dark" data-title="Titel">
+  <div class="a" style="left:942px;top:63px;width:912px;height:963px;overflow:hidden" data-auto="0" data-fx="fade">
+    <img class="kb" src="assets/bg-paper.jpg" alt="" style="width:100%;height:100%;object-fit:cover">
+  </div>
+  <div class="a" style="left:60px;top:300px;width:120px;height:10px;background:var(--o)" data-auto=".5" data-fx="left"></div>
+  <h1 class="a d" style="left:52px;top:330px;font-size:190px;line-height:1.05;color:var(--o);letter-spacing:-2px;white-space:nowrap" data-auto=".4" data-fx="rise">Praktikum</h1>
+  <p class="a" style="left:64px;top:568px;width:840px;font-size:54px;line-height:1.2" data-auto=".8" data-fx="fade">in der Softwareentwicklung sinnvoll nutzen</p>
+  <p class="a" style="left:64px;top:925px;width:860px;font-size:32px;line-height:1.35" data-auto="1.1" data-fx="fade"><b>Markus Herhoffer</b> · CTO EXP<br>Cookie Talks bei Neuland e.V. · 12. November 2026</p>
+  <svg class="a" style="right:96px;bottom:70px;width:132px;height:45px;color:var(--o)"><use href="#exp-logo"/></svg>
+  <aside class="notes"><ul><li>Begrüßung, kurz vorstellen: Markus Herhoffer, CTO bei EXP</li><li>Viele Praktikant:innen betreut</li><li>Beobachtung: gleiches Talent, nach drei Monaten völlig unterschiedliche Ergebnisse</li><li>Heute: warum das so ist und wie ihr den besseren Weg erwischt</li></ul></aside>
+</section>
+
+<!-- ================= 2 · EXP ================= -->
+<section class="slide light" data-title="EXP · Company Snapshot">
+  <p class="eyebrow">Wer hier spricht</p>
+  <h2 class="title">EXP · Company Snapshot</h2>
+  <div class="row-ic" style="left:60px;top:300px;width:840px" data-auto=".3" data-fx="left">
+    <svg class="ic"><use href="#i-building"/></svg>
+    <p>gegründet <b class="hl">2024</b><br>mit über 20 Jahren Erfahrung im Bereitstellen von Daten</p>
+  </div>
+  <div class="row-ic" style="left:60px;top:520px;width:840px" data-auto=".5" data-fx="left">
+    <svg class="ic"><use href="#i-users"/></svg>
+    <p><b class="hl">30</b> hochmotivierte Mitarbeitende</p>
+  </div>
+  <div class="row-ic" style="left:60px;top:710px;width:840px" data-auto=".7" data-fx="left">
+    <svg class="ic"><use href="#i-pin"/></svg>
+    <p>Großraum <b class="hl">München</b></p>
+  </div>
+  <div class="a" style="left:960px;top:260px;width:900px;background:var(--n);border-radius:24px;padding:44px 48px;display:flex;flex-direction:column;gap:28px" data-auto=".9" data-fx="right">
+    <div>
+      <p class="cap" style="color:var(--o);font-size:24px">UNSER PRODUKT · EXPLORE.DE</p>
+      <p style="margin-top:8px;font-size:34px;color:#fff"><span class="d" style="font-size:52px;color:#fff">explore</span>&nbsp; Die Agentic Twin Plattform</p>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px 36px">
+      <div><p class="d" style="font-size:29px;color:var(--o)">Digital Thread</p><p style="font-size:25px;line-height:1.35;color:#D6D6D6;margin-top:6px">verbindet PLM, ERP und IoT über die Zeit, die Daten bleiben in ihren Systemen</p></div>
+      <div><p class="d" style="font-size:29px;color:var(--o)">Agentic Twins</p><p style="font-size:25px;line-height:1.35;color:#D6D6D6;margin-top:6px">dynamische digitale Zwillinge von Produkt, Produktion und Organisation</p></div>
+      <div><p class="d" style="font-size:29px;color:var(--o)">Lora AI</p><p style="font-size:25px;line-height:1.35;color:#D6D6D6;margin-top:6px">KI-Co-Worker, der Zusammenhänge erkennt und Aktionen anstößt</p></div>
+      <div><p class="d" style="font-size:29px;color:var(--o)">Im Einsatz bei</p><p style="font-size:25px;line-height:1.35;color:#D6D6D6;margin-top:6px">Porsche, Mercedes-Benz, John Deere, Sumitomo Electric</p></div>
+    </div>
+  </div>
+  <div class="a" style="left:960px;top:812px;width:900px;background:var(--card);border-radius:24px;padding:26px 48px;display:flex;flex-direction:column;gap:6px" data-auto="1.1" data-fx="rise">
+    <p class="d" style="font-size:30px">Markus Herhoffer · CTO</p>
+    <p style="font-size:27px;line-height:1.3;color:var(--g)">Verantwortet Entwicklung, Architektur und die Praktika</p>
+  </div>
+  <svg class="logo"><use href="#exp-logo"/></svg><span class="pn"></span>
+  <aside class="notes"><ul><li>EXP: 2024 gegründet, über 20 Jahre Geschichte im Bereitstellen von Daten</li><li>[Gründungsjahr und Mitarbeiterzahl prüfen: Pitchdeck sagt 2023 und +20]</li><li>Produkt <b>explore</b>, die Agentic Twin Plattform</li><li>Digital Thread: verbindet PLM, ERP und IoT über die Zeit, Daten bleiben in ihren Systemen</li><li>Agentic Twins von Produkt, Produktion und Organisation, Lora AI als KI-Co-Worker</li><li>Kunden u. a. Porsche, Mercedes-Benz, John Deere</li><li>Meine Perspektive: Ich plane und betreue Praktika und entscheide am Ende über Jobangebote</li></ul></aside>
+</section>
+
+<!-- ================= 3 · HOOK ================= -->
+<section class="slide dark" data-title="12 Wochen. 480 Stunden.">
+  <div class="a" style="left:0;top:0;width:1920px;height:1080px;overflow:hidden">
+    <img class="kb" src="assets/bg-paper.jpg" alt="" style="width:100%;height:100%;object-fit:cover">
+  </div>
+  <div class="a" style="left:880px;top:55px;width:980px;height:980px;background:#fff" data-auto=".2" data-fx="scale"></div>
+  <div class="a" style="left:937px;top:112px;width:866px;height:866px;background:linear-gradient(160deg,#2A1A08 0%,#141414 55%)" data-auto=".3" data-fx="fade"></div>
+  <p class="a d" style="left:985px;top:470px;width:780px;font-size:74px;line-height:1.1;color:var(--o)" data-auto=".7" data-fx="rise">12 Wochen.<br>480 Stunden.</p>
+  <p class="a" style="left:985px;top:665px;width:780px;font-size:41px;line-height:1.3" data-step="1" data-fx="rise">Du kannst sie absitzen. Oder du machst daraus den wichtigsten Baustein deines Lebenslaufs.</p>
+  <p class="a" style="left:985px;top:865px;width:780px;font-size:41px;line-height:1.3;font-weight:500" data-step="2" data-fx="rise">Die Frage ist nur: wie?</p>
+  <aside class="notes"><ul><li>12 Wochen × 40 Stunden = 480 Stunden</li><li>Mehr Praxiszeit am Stück als in vielen Studiengängen</li><li>Erlebt: manche gehen mit Jobangebot, andere mit einem Projekt, das nie wieder jemand anfasst</li><li>Unterschied selten Talent, fast immer: Art des Praktikums und was man daraus macht</li></ul></aside>
+</section>
+
+<!-- ================= 4 · KAPITEL 01 ================= -->
+<section class="slide dark" data-title="01 · Ausgangslage">
+  <div class="a sec-top" data-auto="0" data-fx="drop">01</div>
+  <h1 class="a sec-title" data-auto=".25" data-fx="rise">AUSGANGSLAGE</h1>
+  <p class="a sec-sub" data-auto=".55" data-fx="fade">Warum ein Praktikum heute mehr zählt als je zuvor</p>
+  <div class="a sec-bot" data-auto=".55" data-fx="rise"></div>
+  <aside class="notes"><ul><li>Warum reden wir darüber?</li><li>In den letzten zwei Jahren hat sich verändert, was ein Junior können muss</li></ul></aside>
+</section>
+
+<!-- ================= 5 · WAS EIN PRAKTIKUM LEISTET ================= -->
+<section class="slide light" data-title="Was ein Praktikum leisten kann">
+  <p class="eyebrow">Ausgangslage</p>
+  <h2 class="title">Was ein Praktikum leisten kann</h2>
+  <div class="qcard" style="left:60px" data-step="1" data-fx="rise"><p class="q">Will ich das wirklich?</p><p class="b">Backend, Frontend, Data, KI: Finde heraus, was dir Energie gibt und was nicht.</p><p class="f">Orientierung</p></div>
+  <div class="qcard" style="left:520px" data-step="2" data-fx="rise"><p class="q">Wie bauen Profis Software?</p><p class="b">Git-Workflow, Reviews, Tests, CI/CD: Das lernst du in keiner Vorlesung wirklich.</p><p class="f">Handwerk</p></div>
+  <div class="qcard" style="left:980px" data-step="3" data-fx="rise"><p class="q">Wer bürgt für dich?</p><p class="b">Ein Zeugnis, ein vorzeigbares Projekt und eine Person, die dich empfiehlt.</p><p class="f">Referenz</p></div>
+  <div class="qcard" style="left:1440px" data-step="4" data-fx="rise"><p class="q">Die Bewerbung, die du nicht schreiben musst</p><p class="b">Wer im Praktikum überzeugt, bekommt oft das Angebot. Ohne 40 Bewerbungen vorher.</p><p class="f">Einstieg</p></div>
+  <svg class="logo"><use href="#exp-logo"/></svg><span class="pn"></span>
+  <aside class="notes"><ul><li><b>Orientierung:</b> Backend, Data oder KI, was liegt mir?</li><li><b>Handwerk:</b> Git, Reviews, Tests, Deployments, kommt in der Uni zu kurz</li><li><b>Referenz:</b> Zeugnis, Projekt, eine Person, die für dich bürgt</li><li><b>Einstieg:</b> Die beste Bewerbung ist die, die du nicht schreiben musst (Callback: 40 Bewerbungen aus dem letzten Vortrag)</li><li>Welche davon ihr bekommt, hängt von der Art des Praktikums ab</li></ul></aside>
+</section>
+
+<!-- ================= 6 · EISBERG ================= -->
+<section class="slide dark" data-title="Eisberg: unter der Wasserlinie">
+  <p class="eyebrow">Ausgangslage</p>
+  <h2 class="title">Junior-Code schreibt heute die KI.<br>Gelernt wird unter der Wasserlinie.</h2>
+  <svg class="a" style="left:60px;top:260px;overflow:visible" width="1100" height="780" viewBox="0 0 1100 780" data-auto=".2" data-fx="fade" aria-label="Eisberg">
+    <defs>
+      <linearGradient id="g-water" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2B2B2B"/><stop offset=".55" stop-color="#1C1C1C"/><stop offset="1" stop-color="#141414"/></linearGradient>
+      <linearGradient id="g-fog" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#141414" stop-opacity="0"/><stop offset=".35" stop-color="#141414" stop-opacity=".12"/><stop offset=".75" stop-color="#141414" stop-opacity=".6"/><stop offset="1" stop-color="#141414" stop-opacity=".97"/></linearGradient>
+      <linearGradient id="g-ray" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".09"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+      <linearGradient id="g-surf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".16"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+      <linearGradient id="g-sheen" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".22"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/></linearGradient>
+      <linearGradient id="g-hfade" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".14" stop-color="#fff"/><stop offset=".86" stop-color="#fff"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+      <mask id="m-fade" maskUnits="userSpaceOnUse" x="-200" y="0" width="1500" height="800"><rect x="0" y="0" width="1100" height="800" fill="url(#g-hfade)"/></mask>
+      <radialGradient id="g-halo" cx="585" cy="110" r="260" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#FF8200" stop-opacity=".28"/><stop offset="1" stop-color="#FF8200" stop-opacity="0"/></radialGradient>
+      <radialGradient id="g-deep" cx="590" cy="470" r="420" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#FF8200" stop-opacity=".16"/><stop offset="1" stop-color="#FF8200" stop-opacity="0"/></radialGradient>
+    </defs>
+
+    <!-- Himmel-Glühen hinter der Spitze -->
+    <circle class="glow" cx="585" cy="110" r="260" fill="url(#g-halo)"/>
+
+    <!-- Wasser + Lichtstrahlen -->
+    <g mask="url(#m-fade)">
+    <rect x="0" y="170" width="1100" height="610" fill="url(#g-water)"/>
+    <rect x="0" y="170" width="1100" height="610" fill="url(#g-deep)"/>
+    <polygon class="ray" points="140,172 230,172 110,780 -40,780" fill="url(#g-ray)"/>
+    <polygon class="ray r2" points="300,172 350,172 330,780 230,780" fill="url(#g-ray)"/>
+    <polygon class="ray r3" points="900,172 990,172 1120,780 960,780" fill="url(#g-ray)"/>
+    <polygon class="ray r4" points="1010,172 1050,172 1140,780 1080,780" fill="url(#g-ray)"/>
+    </g>
+
+    <g class="bob">
+      <!-- Unter Wasser: facettierter Körper -->
+      <g stroke="#fff" stroke-opacity=".10" stroke-width="1.2" stroke-linejoin="round">
+        <polygon points="430,172 600,172 560,260" fill="#FF8200"/>
+        <polygon points="600,172 760,172 700,300" fill="#E87600"/>
+        <polygon points="600,172 700,300 560,260" fill="#FF9A33"/>
+        <polygon points="430,172 560,260 360,240" fill="#D96E00"/>
+        <polygon points="360,240 560,260 460,420" fill="#E87600"/>
+        <polygon points="360,240 460,420 300,360" fill="#B85C00"/>
+        <polygon points="560,260 700,300 640,450" fill="#FF8200"/>
+        <polygon points="560,260 640,450 460,420" fill="#D96E00"/>
+        <polygon points="760,172 840,280 700,300" fill="#B85C00"/>
+        <polygon points="840,280 880,410 760,470" fill="#8A4500"/>
+        <polygon points="840,280 760,470 700,300" fill="#D96E00"/>
+        <polygon points="700,300 760,470 640,450" fill="#B85C00"/>
+        <polygon points="300,360 460,420 320,500" fill="#8A4500"/>
+        <polygon points="320,500 460,420 400,620" fill="#B85C00"/>
+        <polygon points="460,420 640,450 560,600" fill="#D96E00"/>
+        <polygon points="460,420 560,600 400,620" fill="#8A4500"/>
+        <polygon points="640,450 760,470 560,600" fill="#B85C00"/>
+        <polygon points="760,470 880,410 850,560" fill="#5C2E00"/>
+        <polygon points="760,470 850,560 760,690" fill="#8A4500"/>
+        <polygon points="560,600 760,470 760,690" fill="#7A3D00"/>
+        <polygon points="400,620 560,600 520,720" fill="#5C2E00"/>
+        <polygon points="560,600 640,745 520,720" fill="#4A2500"/>
+        <polygon points="560,600 760,690 640,745" fill="#5C2E00"/>
+      </g>
+      <polygon points="430,172 760,172 840,280 880,410 850,560 760,690 640,745 520,720 400,620 320,500 300,360 360,240" fill="url(#g-sheen)"/>
+
+      <!-- Über Wasser: Spitze -->
+      <g stroke="#141414" stroke-opacity=".12" stroke-width="1" stroke-linejoin="round">
+        <polygon points="450,170 520,95 560,170" fill="#E6E6E6"/>
+        <polygon points="520,95 585,28 560,170" fill="#FFFFFF"/>
+        <polygon points="585,28 640,85 610,170 560,170" fill="#D6D6D6"/>
+        <polygon points="640,85 690,120 720,170 610,170" fill="#BDBDBD"/>
+        <polygon points="520,95 585,28 548,92" fill="#FFFFFF"/>
+      </g>
+      <path class="twinkle" d="M585 6 L589 24 L607 28 L589 32 L585 50 L581 32 L563 28 L581 24 Z" fill="#fff"/>
+    </g>
+
+    <!-- Tiefe, Oberfläche, Blasen -->
+    <g mask="url(#m-fade)">
+    <rect x="0" y="172" width="1100" height="608" fill="url(#g-fog)"/>
+    <rect x="0" y="172" width="1100" height="46" fill="url(#g-surf)"/>
+    <g fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="2">
+      <circle class="bub" cx="420" cy="690" r="5"/>
+      <circle class="bub b2" cx="520" cy="740" r="3.5"/>
+      <circle class="bub b3" cx="700" cy="720" r="6"/>
+      <circle class="bub b4" cx="830" cy="620" r="4"/>
+      <circle class="bub b5" cx="360" cy="720" r="3"/>
+      <circle class="bub b6" cx="620" cy="770" r="4.5"/>
+    </g>
+    <g class="wave2"><path d="M-200 168 q50 -10 100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="2"/></g>
+    <g class="wave"><path d="M0 172 q50 -14 100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0" fill="none" stroke="#FF8200" stroke-width="4"/></g>
+    </g>
+
+    <!-- Verbindungslinien zu Label & Liste -->
+    <line x1="700" y1="118" x2="758" y2="58" stroke="#BDBDBD" stroke-width="2" stroke-dasharray="2 7" stroke-linecap="round"/>
+    <g stroke="#FF8200" stroke-width="2" stroke-dasharray="2 8" stroke-linecap="round" stroke-opacity=".7">
+      <g data-step="1" data-fx="fade"><line x1="808" y1="219" x2="1100" y2="219"/><circle cx="797" cy="219" r="6" fill="#FF8200" stroke="none"/></g>
+      <g data-step="2" data-fx="fade"><line x1="858" y1="299" x2="1100" y2="299"/><circle cx="846" cy="299" r="6" fill="#FF8200" stroke="none"/></g>
+      <g data-step="3" data-fx="fade"><line x1="882" y1="379" x2="1100" y2="379"/><circle cx="870" cy="379" r="6" fill="#FF8200" stroke="none"/></g>
+      <g data-step="4" data-fx="fade"><line x1="882" y1="459" x2="1100" y2="459"/><circle cx="870" cy="459" r="6" fill="#FF8200" stroke="none"/></g>
+      <g data-step="5" data-fx="fade"><line x1="866" y1="539" x2="1100" y2="539"/><circle cx="854" cy="539" r="6" fill="#FF8200" stroke="none"/></g>
+      <g data-step="6" data-fx="fade"><line x1="821" y1="619" x2="1100" y2="619"/><circle cx="809" cy="619" r="6" fill="#FF8200" stroke="none"/></g>
+    </g>
+  </svg>
+  <p class="a" style="left:830px;top:290px;width:420px;font-size:33px;line-height:1.25" data-auto=".7" data-fx="fade"><b>Code tippen</b><br><span style="color:var(--g2)">übernimmt zunehmend die KI</span></p>
+  <p class="a" style="left:84px;top:446px;font-size:24px;letter-spacing:3px;text-transform:uppercase;color:var(--g3)" data-auto=".9" data-fx="fade">unter der Wasserlinie</p>
+  <p class="lst" style="top:450px" data-step="1" data-fx="left">Anforderungen verstehen</p>
+  <p class="lst" style="top:530px" data-step="2" data-fx="left">Fremden Code lesen und reviewen</p>
+  <p class="lst" style="top:610px" data-step="3" data-fx="left">Debuggen im echten System</p>
+  <p class="lst" style="top:690px" data-step="4" data-fx="left">Architektur-Entscheidungen abwägen</p>
+  <p class="lst" style="top:770px" data-step="5" data-fx="left">Im Team kommunizieren</p>
+  <p class="lst" style="top:850px" data-step="6" data-fx="left">Verantwortung für Produktion tragen</p>
+  <svg class="logo"><use href="#exp-logo"/></svg><span class="pn"></span>
+  <aside class="notes"><ul><li>Callback letzter Vortrag: Copiloten leisten heute die Arbeit eines leicht unterdurchschnittlichen Juniors</li><li>Die Spitze, Code tippen, ist nicht mehr der Grund, euch einzustellen</li><li>Unter der Wasserlinie: Anforderungen, fremden Code lesen, debuggen, Architektur, Kommunikation, Verantwortung</li><li>Lernt man nicht aus Tutorials, nur in der Praxis</li><li>Das Praktikum ist der Ort dafür, wenn ihr es richtig nutzt</li></ul></aside>
+</section>
+
+<!-- ================= 7 · KAPITEL 02 ================= -->
+<section class="slide dark" data-title="02 · Zwei Wege">
+  <div class="a sec-top" data-auto="0" data-fx="drop">02</div>
+  <h1 class="a sec-title" data-auto=".25" data-fx="rise">ZWEI WEGE</h1>
+  <p class="a sec-sub" data-auto=".55" data-fx="fade">Die Weggabelung am ersten Tag</p>
+  <div class="a sec-bot" data-auto=".55" data-fx="rise"></div>
+  <aside class="notes"><ul><li>Zwei Arten von Praktika in der Softwareentwicklung</li><li>Meist entscheidet sich am ersten Tag, welche ihr bekommt</li></ul></aside>
+</section>
+
+<!-- ================= 8 · WEGGABELUNG ================= -->
+<section class="slide dark" data-title="Die Weggabelung">
+  <p class="eyebrow">Zwei Wege</p>
+  <h2 class="title">Am ersten Tag entscheidet sich, welches Praktikum du bekommst</h2>
+  <svg class="a" style="left:60px;top:280px" width="1240" height="640" viewBox="0 0 1240 640" data-auto=".2" data-fx="fade" aria-label="Weggabelung">
+    <path d="M60 320 L480 320" stroke="#2A2A2A" stroke-width="14" fill="none" stroke-linecap="round"/>
+    <path d="M480 320 C700 320 760 120 1000 120 L1220 120" stroke="#3D2410" stroke-width="14" fill="none" stroke-linecap="round"/>
+    <path d="M480 320 C700 320 760 520 1000 520 L1220 520" stroke="#2A2A2A" stroke-width="14" fill="none" stroke-linecap="round"/>
+    <path class="flow" d="M60 320 L480 320" stroke="#fff" stroke-width="7" fill="none" stroke-linecap="round"/>
+    <path class="flow" d="M480 320 C700 320 760 120 1000 120 L1220 120" stroke="#FF8200" stroke-width="7" fill="none" stroke-linecap="round"/>
+    <path class="flow" d="M480 320 C700 320 760 520 1000 520 L1220 520" stroke="#fff" stroke-width="7" fill="none" stroke-linecap="round"/>
+    <circle class="pulse" cx="480" cy="320" r="18" fill="none" stroke="#FF8200" stroke-width="4"/>
+    <circle cx="480" cy="320" r="16" fill="#FF8200"/>
+    <circle r="13" fill="#FF8200"><animateMotion dur="4s" repeatCount="indefinite" path="M60 320 L480 320 C700 320 760 120 1000 120 L1220 120"/></circle>
+    <circle r="13" fill="#fff"><animateMotion dur="4s" begin="2s" repeatCount="indefinite" path="M60 320 L480 320 C700 320 760 520 1000 520 L1220 520"/></circle>
+    <circle cx="60" cy="320" r="44" fill="#fff"/>
+    <text x="60" y="331" text-anchor="middle" style="font:500 32px var(--fd);fill:#141414">Du</text>
+    <text x="60" y="245" text-anchor="middle" class="svgs" style="fill:#BDBDBD">Tag 1</text>
+    <circle cx="1220" cy="120" r="24" fill="#FF8200"/>
+    <circle cx="1220" cy="520" r="24" fill="#fff"/>
+  </svg>
+  <div class="a" style="left:1330px;top:280px;width:530px;background:var(--o);border-radius:24px;padding:36px 40px;display:flex;flex-direction:column;gap:10px;color:var(--n)" data-step="1" data-fx="right">
+    <p class="cap">DAS LABOR</p>
+    <h3 class="d" style="font-size:42px;line-height:1.1">Forschungsprojekt / PoC</h3>
+    <p style="font-size:31px;line-height:1.3">Eine offene Frage. Viel Freiheit. Meistens allein.</p>
+  </div>
+  <div class="a" style="left:1330px;top:680px;width:530px;background:#fff;border-radius:24px;padding:36px 40px;display:flex;flex-direction:column;gap:10px;color:var(--n)" data-step="2" data-fx="right">
+    <p class="cap" style="color:var(--o2)">DIE WERKSTATT</p>
+    <h3 class="d" style="font-size:42px;line-height:1.1">Teil eines Teams</h3>
+    <p style="font-size:31px;line-height:1.3">Echter Produktcode. Feste Prozesse. Mittendrin.</p>
+  </div>
+  <svg class="logo"><use href="#exp-logo"/></svg><span class="pn"></span>
+  <aside class="notes"><ul><li><b>Das Labor:</b> isoliertes Forschungsprojekt / PoC, offene Frage, viel Freiheit, meist allein mit Betreuung</li><li><b>Die Werkstatt:</b> Teil eines bestehenden Teams, echtes Produkt, alle Prozesse</li><li>Beides legitim, beides hat Stärken und Fallen</li><li>Oft sucht man es sich nicht aus, aber man kann danach fragen und beeinflussen, was man daraus macht</li><li>Überleitung: zwei Personen vorstellen</li></ul></aside>
+</section>
+
+<!-- ================= 9 · PAULA ================= -->
+<section class="slide dark" data-title="Anekdote: Paula Prototyp">
+  <p class="eyebrow">Anekdote · Das Labor</p>
+  <div class="who" style="left:60px" data-magic="who">
+    <h2>Paula Prototyp,<br>die Forscherin</h2>
+    <p>Ihre Aufgabe: <span class="hl">„Finde heraus, ob ein LLM unsere Stücklisten automatisch klassifizieren kann.“</span> Eigener Tisch, eigene GPU, ein Check-in pro Woche.</p>
+  </div>
+  <img class="a illu" src="assets/illu-paula.jpg" alt="Comic-Illustration: Paula im orangen Hoodie arbeitet konzentriert allein am Laptop, hinter ihr ein Whiteboard mit Diagramm" style="left:1130px;top:110px;width:672px;height:840px;object-fit:contain" data-magic="illu" data-auto=".2" data-fx="scale">
+  <svg class="logo"><use href="#exp-logo"/></svg><span class="pn"></span>
+  <aside class="notes"><ul><li>Paula Prototyp: fiktiv, zusammengesetzt aus echten Praktikant:innen</li><li>Aufgabe: Kann ein LLM unsere Stücklisten automatisch klassifizieren?</li><li>Tisch, GPU, Betreuerin, ein Check-in pro Woche, sonst freie Bahn</li><li>Frage ans Publikum: Traumpraktikum?</li></ul></aside>
+</section>
+
+<!-- ================= 10 · TOM ================= -->
+<section class="slide dark" data-title="Anekdote: Tom Teamplayer">
+  <p class="eyebrow">Anekdote · Die Werkstatt</p>
+  <img class="a illu" src="assets/illu-tom.jpg" alt="Comic-Illustration: Tom im orangen T-Shirt mit Kaffeetasse beim Stand-up vor dem Kanban-Board, umgeben von Kolleg:innen" style="left:118px;top:110px;width:672px;height:840px;object-fit:contain" data-magic="illu">
+  <div class="who" style="left:1000px" data-magic="who">
+    <h2>Tom Teamplayer,<br>der Neue im Sprint</h2>
+    <p>Sein erstes Ticket: <span class="hl">„Fehlermeldung beim Login korrigieren.“</span> Eine Zeile Code. Drei Tage bis zum Merge.</p>
+  </div>
+  <svg class="logo"><use href="#exp-logo"/></svg><span class="pn"></span>
+  <aside class="notes"><ul><li>Tom Teamplayer: Plattform-Team, sieben Leute, Zwei-Wochen-Sprints</li><li>Erstes Ticket: Fehlermeldung beim Login korrigieren, eine Zeile Code</li><li>Drei Tage: Build aufsetzen, Branch-Konventionen, zwei Review-Runden, roter CI-Lauf</li><li>Frage ans Publikum: Frust?</li><li>Wir begleiten beide durch ihre zwölf Wochen</li></ul></aside>
+</section>
+
+<!-- ================= 11 · KAPITEL 03 ================= -->
+<section class="slide dark" data-title="03 · Das Labor">
+  <div class="a sec-top" data-auto="0" data-fx="drop">03</div>
+  <h1 class="a sec-title" data-auto=".25" data-fx="rise">DAS LABOR</h1>
+  <p class="a sec-sub" data-auto=".55" data-fx="fade">Das isolierte Forschungsprojekt / der Proof of Concept</p>
+  <div class="a sec-bot" data-auto=".55" data-fx="rise"></div>
+  <aside class="notes"><ul><li>Zuerst Paulas Weg: das Labor</li></ul></aside>
+</section>
+
+<!-- ================= 12 · PAULAS 12 WOCHEN ================= -->
+<section class="slide light" data-title="Paulas zwölf Wochen">
+  <p class="eyebrow">Das Labor · Forschungsprojekt</p>
+  <h2 class="title">Paulas zwölf Wochen</h2>
+  <svg class="a" style="left:60px;top:270px" width="1800" height="90" viewBox="0 0 1800 90" data-auto=".2" data-fx="fade" aria-label="Zeitstrahl">
+    <line x1="10" y1="45" x2="1790" y2="45" stroke="#E6E6E6" stroke-width="10" stroke-linecap="round"/>
+    <line class="prog" x1="10" y1="45" x2="1790" y2="45" stroke="#FF8200" stroke-width="10" stroke-linecap="round"/>
+    <circle cx="10" cy="45" r="8" fill="#141414"/><circle cx="310" cy="45" r="8" fill="#141414"/><circle cx="1210" cy="45" r="8" fill="#141414"/><circle cx="1510" cy="45" r="8" fill="#141414"/><circle cx="1790" cy="45" r="8" fill="#141414"/>
+    <g class="dot"><circle cx="10" cy="45" r="20" fill="#FF8200" stroke="#fff" stroke-width="6"/></g>
+  </svg>
+  <div class="phase" style="left:60px;width:288px" data-step="1" data-fx="left"><p class="w">Woche 1–2</p><h3>Verstehen</h3><p>Fragestellung schärfen, Paper und Tools sichten</p></div>
+  <div class="phase" style="left:360px;width:888px" data-step="2" data-fx="left"><p class="w">Woche 3–8</p><h3>Bauen und Iterieren</h3><p style="font-size:29px">Prototyp bauen, verwerfen, neu bauen. Viel Freiheit, viel KI-Unterstützung. Und kaum jemand, der den Code gegenliest.</p></div>
+  <div class="phase" style="left:1260px;width:288px" data-step="3" data-fx="left"><p class="w">Woche 9–10</p><h3>Messen</h3><p>Ergebnisse evaluieren, Grenzen dokumentieren</p></div>
+  <div class="phase" style="left:1560px;width:300px;background:var(--n);color:#fff" data-step="4" data-fx="left"><p class="w" style="color:var(--o)">Woche 11–12</p><h3>Zeigen</h3><p style="color:#D6D6D6">Demo vor dem Management, Doku, Empfehlung</p></div>
+  <div class="a" style="left:60px;top:740px;width:880px;display:flex;flex-direction:column;gap:18px" data-step="5" data-fx="fade">
+    <p class="cap">DAS SETTING</p>
+    <div class="chips"><span class="chip">1 Praktikantin</span><span class="chip">1 Betreuerin</span><span class="chip">1 offene Frage</span><span class="chip">1 Check-in pro Woche</span></div>
+  </div>
+  <div class="a" style="left:1000px;top:730px;width:860px;background:var(--o);border-radius:20px;padding:30px 40px;font-size:33px;line-height:1.3;color:var(--n)" data-step="6" data-fx="rise"><b>Und danach?</b> Der PoC wird zum Produkt oder verschwindet in der Schublade.</div>
+  <svg class="logo"><use href="#exp-logo"/></svg><span class="pn"></span>
+  <aside class="notes"><ul><li><b>Woche 1–2, Verstehen:</b> Was ist die Frage, was gibt es schon?</li><li><b>Woche 3–8, Bauen und Iterieren:</b> spannend, aber gefährlich</li><li>Niemand liest den Code gegen, die KI produziert schnell sehr viel</li><li><b>Woche 9–10</b> Messen, <b>Woche 11–12</b> Zeigen</li><li>Am Ende eine Demo und die große Frage: Produkt oder Schublade?</li></ul></aside>
+</section>
+
+<!-- ================= 13 · PoC VOR/NACHTEILE ================= -->
+<section class="slide light" data-title="Labor: Vor- und Nachteile">
+  <p class="eyebrow">Das Labor · Forschungsprojekt</p>
+  <h2 class="title">Freiheit hat ihren Preis</h2>
+  <div class="colhead" style="left:60px"><svg class="ic" style="color:var(--o)"><use href="#i-up"/></svg>Vorteile</div>
+  <div class="colhead" style="left:990px"><svg class="ic"><use href="#i-warn"/></svg>Nachteile</div>
+  <div class="pc" style="top:330px" data-step="1" data-fx="left"><svg class="ic"><use href="#i-check"/></svg><p><b>Eigene Story:</b> perfekt für Bewerbung und Abschlussarbeit</p></div>
+  <div class="pc" style="top:454px" data-step="2" data-fx="left"><svg class="ic"><use href="#i-check"/></svg><p><b>Große Freiheit</b> bei Technologie, Vorgehen und Tempo</p></div>
+  <div class="pc" style="top:578px" data-step="3" data-fx="left"><svg class="ic"><use href="#i-check"/></svg><p><b>Neueste Technologie</b> statt Legacy-Code</p></div>
+  <div class="pc" style="top:702px" data-step="4" data-fx="left"><svg class="ic"><use href="#i-check"/></svg><p><b>Sichtbares Ergebnis:</b> deine Demo vor dem Management</p></div>
+  <div class="pc" style="top:826px" data-step="5" data-fx="left"><svg class="ic"><use href="#i-check"/></svg><p><b>Strukturieren lernen:</b> aus einer offenen Frage ein Ergebnis machen</p></div>
+  <div class="cc" style="top:330px" data-step="6" data-fx="right"><svg class="ic"><use href="#i-warn"/></svg><p><b>Einsam:</b> wenig Feedback, kaum Code-Reviews</p></div>
+  <div class="cc" style="top:454px" data-step="7" data-fx="right"><svg class="ic"><use href="#i-warn"/></svg><p><b>Kein Produktions-Handwerk:</b> CI/CD, Tests und Betrieb fehlen oft</p></div>
+  <div class="cc" style="top:578px" data-step="8" data-fx="right"><svg class="ic"><use href="#i-warn"/></svg><p><b>Schublade:</b> Viele PoCs gehen nie in Produktion</p></div>
+  <div class="cc" style="top:702px" data-step="9" data-fx="right"><svg class="ic"><use href="#i-warn"/></svg><p><b>Abhängig</b> von einer Betreuung, die Zeit haben muss</p></div>
+  <div class="cc" style="top:826px" data-step="10" data-fx="right"><svg class="ic"><use href="#i-warn"/></svg><p><b>Wegwerf-Code:</b> schnell generiert, aber ohne Qualität</p></div>
+  <svg class="logo"><use href="#exp-logo"/></svg><span class="pn"></span>
+  <aside class="notes"><ul><li><b>Pro:</b> eigene Story für jedes Bewerbungsgespräch (Callback: Erfolgsgeschichte)</li><li><b>Pro:</b> Freiheit, neueste Technologie, sichtbares Ergebnis</li><li><b>Pro:</b> lernt, aus einer offenen Frage ein Ergebnis zu machen</li><li><b>Contra:</b> oft allein, kaum Reviews, kaum Feedback aufs Handwerk</li><li><b>Contra:</b> CI/CD, Tests, Betrieb fehlen oft komplett</li><li><b>Contra:</b> viele PoCs landen in der Schublade</li><li><b>Contra:</b> abhängig von einer Betreuung mit wenig Zeit</li><li>Größte Falle 2026: schnell viel KI-Code, den niemand versteht, auch man selbst nicht</li></ul></aside>
+</section>
+
+<!-- ================= 14 · KAPITEL 04 ================= -->
+<section class="slide dark" data-title="04 · Die Werkstatt">
+  <div class="a sec-top" data-auto="0" data-fx="drop">04</div>
+  <h1 class="a sec-title" data-auto=".25" data-fx="rise">DIE WERKSTATT</h1>
+  <p class="a sec-sub" data-auto=".55" data-fx="fade">Mittendrin, als Teil eines Teams</p>
+  <div class="a sec-bot" data-auto=".55" data-fx="rise"></div>
+  <aside class="notes"><ul><li>Jetzt Toms Weg: die Werkstatt</li></ul></aside>
+</section>
+
+<!-- ================= 15 · TOMS KREISLAUF ================= -->
+<section class="slide light" data-title="Toms Kreislauf">
+  <p class="eyebrow">Die Werkstatt · Im Team</p>
+  <h2 class="title">Toms Alltag: ein Kreislauf, jeden Tag</h2>
+  <svg class="a" style="left:120px;top:250px" width="700" height="700" viewBox="0 0 700 700" data-auto=".1" data-fx="fade" aria-label="Kreislauf">
+    <circle cx="350" cy="350" r="260" fill="none" stroke="#E6E6E6" stroke-width="8"/>
+    <g class="spin">
+      <circle cx="350" cy="350" r="260" fill="none" stroke="#FF8200" stroke-width="8" stroke-dasharray="300 1334" stroke-linecap="round"/>
+      <circle cx="455.7" cy="587.5" r="14" fill="#FF8200" stroke="#fff" stroke-width="5"/>
+    </g>
+    <circle class="breathe" cx="350" cy="350" r="150" fill="#FFF1E3"/>
+    <text x="350" y="358" text-anchor="middle" style="font:500 56px var(--fd);fill:#D96E00">Iteration</text>
+    <text x="350" y="410" text-anchor="middle" class="svgs" style="fill:#555555">Daily · Sprint · Retro</text>
+  </svg>
+  <p class="pill"   style="left:355px;top:312px" data-auto=".3"  data-fx="pop">Ticket</p>
+  <p class="pill"   style="left:539px;top:388px" data-auto=".5"  data-fx="pop">Branch</p>
+  <p class="pill"   style="left:615px;top:572px" data-auto=".7"  data-fx="pop">Code + Tests</p>
+  <p class="pill"   style="left:539px;top:756px" data-auto=".9"  data-fx="pop">Merge Request</p>
+  <p class="pill o" style="left:355px;top:832px" data-auto="1.1" data-fx="pop">Review</p>
+  <p class="pill"   style="left:171px;top:756px" data-auto="1.3" data-fx="pop">CI/CD</p>
+  <p class="pill"   style="left:95px;top:572px"  data-auto="1.5" data-fx="pop">Deploy</p>
+  <p class="pill o" style="left:171px;top:388px" data-auto="1.7" data-fx="pop">Feedback</p>
+  <div class="a" style="left:960px;top:280px;width:900px;display:flex;flex-direction:column;gap:18px" data-step="1" data-fx="fade">
+    <p class="cap">DAS SETTING</p>
+    <div class="chips"><span class="chip">5–8 Kolleg:innen</span><span class="chip">Pair-Programming</span><span class="chip">Review bei jedem Merge</span><span class="chip">Tägliches Stand-up</span><span class="chip">Echte Nutzer:innen</span></div>
+  </div>
+  <div class="a" style="left:960px;top:600px;width:900px;background:var(--n);border-radius:24px;padding:44px 48px;display:flex;flex-direction:column;gap:18px" data-step="2" data-fx="rise">
+    <p style="font-size:37px;line-height:1.3;color:#fff">„In Woche 1 hat Tom genau eine Zeile Code geändert. Und dabei mehr über echte Software gelernt als in einem Semester.“</p>
+    <p style="font-size:27px;color:var(--o)">Seine Teamleiterin, nach dem Praktikum</p>
+  </div>
+  <svg class="logo"><use href="#exp-logo"/></svg><span class="pn"></span>
+  <aside class="notes"><ul><li>Kreislauf: Ticket, Branch, Code + Tests, Merge Request, Review, CI/CD, Deploy, Feedback, von vorn</li><li>Jeden Tag</li><li>Fühlt sich anfangs langsam an: eine Zeile, drei Tage</li><li>Gelernt dabei: Build-System, Merge Request schreiben, mit Review-Kommentaren umgehen, warum die Pipeline rot ist</li><li>Zitat ist Teil der fiktiven Geschichte, aber so oder ähnlich oft gehört</li></ul></aside>
+</section>
+
+<!-- ================= 16 · TEAM VOR/NACHTEILE ================= -->
+<section class="slide light" data-title="Werkstatt: Vor- und Nachteile">
+  <p class="eyebrow">Die Werkstatt · Im Team</p>
+  <h2 class="title">Mittendrin heißt auch: eingebunden</h2>
+  <div class="colhead" style="left:60px"><svg class="ic" style="color:var(--o)"><use href="#i-up"/></svg>Vorteile</div>
+  <div class="colhead" style="left:990px"><svg class="ic"><use href="#i-warn"/></svg>Nachteile</div>
+  <div class="pc" style="top:330px" data-step="1" data-fx="left"><svg class="ic"><use href="#i-check"/></svg><p><b>Echtes Handwerk:</b> Git-Flow, Reviews, Tests, CI/CD, Betrieb</p></div>
+  <div class="pc" style="top:454px" data-step="2" data-fx="left"><svg class="ic"><use href="#i-check"/></svg><p><b>Feedback täglich</b> durch Reviews und Pairing</p></div>
+  <div class="pc" style="top:578px" data-step="3" data-fx="left"><svg class="ic"><use href="#i-check"/></svg><p><b>Code lesen lernen</b> in großen, fremden Codebasen</p></div>
+  <div class="pc" style="top:702px" data-step="4" data-fx="left"><svg class="ic"><use href="#i-check"/></svg><p><b>Netzwerk:</b> Viele kennen deine Arbeit und empfehlen dich</p></div>
+  <div class="pc" style="top:826px" data-step="5" data-fx="left"><svg class="ic"><use href="#i-check"/></svg><p><b>Dein Code geht live:</b> echte Nutzer, echte Verantwortung</p></div>
+  <div class="cc" style="top:330px" data-step="6" data-fx="right"><svg class="ic"><use href="#i-warn"/></svg><p><b>Langer Anlauf:</b> Setup, Domäne und Prozesse verstehen</p></div>
+  <div class="cc" style="top:454px" data-step="7" data-fx="right"><svg class="ic"><use href="#i-warn"/></svg><p><b>Kleine Tickets:</b> Dein Beitrag ist schwer sichtbar</p></div>
+  <div class="cc" style="top:578px" data-step="8" data-fx="right"><svg class="ic"><use href="#i-warn"/></svg><p><b>Wenig Gestaltung:</b> Stack und Prozesse sind gesetzt</p></div>
+  <div class="cc" style="top:702px" data-step="9" data-fx="right"><svg class="ic"><use href="#i-warn"/></svg><p><b>Ticket-Abarbeiter</b> ohne Blick aufs Ganze</p></div>
+  <div class="cc" style="top:826px" data-step="10" data-fx="right"><svg class="ic"><use href="#i-warn"/></svg><p><b>Lieferdruck:</b> wenig Zeit, sich um dich zu kümmern</p></div>
+  <svg class="logo"><use href="#exp-logo"/></svg><span class="pn"></span>
+  <aside class="notes"><ul><li><b>Pro:</b> echtes Handwerk, genau das unter der Wasserlinie</li><li><b>Pro:</b> tägliches Feedback durch Reviews und Pairing</li><li><b>Pro:</b> große fremde Codebasen lesen, vielleicht die wichtigste Fähigkeit im KI-Zeitalter</li><li><b>Pro:</b> Netzwerk, und der Code geht live</li><li><b>Contra:</b> langer Anlauf</li><li><b>Contra:</b> kleine Tickets, Beitrag schwer sichtbar, wenig Gestaltung</li><li><b>Contra:</b> Gefahr Ticket-Abarbeiter ohne Blick aufs Ganze</li><li><b>Contra:</b> Teams unter Lieferdruck haben wenig Zeit</li></ul></aside>
+</section>
+
+<!-- ================= 17 · KAPITEL 05 ================= -->
+<section class="slide dark" data-title="05 · Vergleich">
+  <div class="a sec-top" data-auto="0" data-fx="drop">05</div>
+  <h1 class="a sec-title" data-auto=".25" data-fx="rise">VERGLEICH</h1>
+  <p class="a sec-sub" data-auto=".55" data-fx="fade">Welcher Weg passt zu dir?</p>
+  <div class="a sec-bot" data-auto=".55" data-fx="rise"></div>
+  <aside class="notes"><ul><li>Beide Wege nebeneinander</li></ul></aside>
+</section>
+
+<!-- ================= 18 · RADAR ================= -->
+<section class="slide dark" data-title="Radar: zwei Profile" data-enter="radar">
+  <p class="eyebrow">Vergleich</p>
+  <h2 class="title">Zwei Profile, zwei Stärken</h2>
+  <svg class="a radar" style="left:130px;top:250px" width="1140" height="720" viewBox="0 0 1140 720" aria-label="Radar-Vergleich"></svg>
+  <div class="a" style="left:1300px;top:290px;width:560px;display:flex;flex-direction:column;gap:18px" data-auto=".3" data-fx="fade">
+    <div style="display:flex;align-items:center;gap:18px"><span style="width:56px;height:8px;background:var(--o);border-radius:4px"></span><p style="font-size:31px"><b>Labor</b> · Forschungsprojekt</p></div>
+    <div style="display:flex;align-items:center;gap:18px"><span style="width:56px;height:8px;background:repeating-linear-gradient(90deg,#fff 0 14px,transparent 14px 24px)"></span><p style="font-size:31px"><b>Werkstatt</b> · Team</p></div>
+  </div>
+  <p class="a" style="left:1300px;top:470px;width:560px;border-left:6px solid var(--o);padding:8px 0 8px 28px;font-size:33px;line-height:1.3" data-step="1" data-fx="rise">Das Labor gewinnt bei <b>Freiheit</b> und der <b>Story</b>, die du erzählen kannst.</p>
+  <p class="a" style="left:1300px;top:640px;width:560px;border-left:6px solid #fff;padding:8px 0 8px 28px;font-size:33px;line-height:1.3" data-step="2" data-fx="rise">Die Werkstatt gewinnt bei <b>Handwerk</b>, <b>Feedback</b> und <b>Netzwerk</b>.</p>
+  <p class="a" style="left:1300px;top:840px;width:560px;font-size:24px;color:var(--g3)">Subjektive Einschätzung aus CTO-Sicht, Skala 1–5</p>
+  <svg class="logo"><use href="#exp-logo"/></svg><span class="pn"></span>
+  <aside class="notes"><ul><li>Sechs Achsen, ganz subjektiv aus CTO-Sicht</li><li><b>Labor</b> (orange): Freiheit, sichtbares Ergebnis, Story für den Lebenslauf</li><li><b>Werkstatt</b> (weiß gestrichelt): Handwerk, Feedback-Frequenz, Netzwerk</li><li>Werte Labor: 5 / 4 / 2 / 2 / 2 / 5</li><li>Werte Werkstatt: 2 / 2 / 5 / 5 / 5 / 3</li><li>Keiner besser, aber komplementär. Merken, wird gleich wichtig</li></ul></aside>
+</section>
+
+<!-- ================= 19 · LERNKURVEN ================= -->
+<section class="slide dark" data-title="Zwei Lernkurven" data-enter="curve">
+  <p class="eyebrow">Vergleich</p>
+  <h2 class="title">Zwei Lernkurven</h2>
+  <svg class="a curve" style="left:60px;top:260px" width="1300" height="680" viewBox="0 0 1300 680" aria-label="Lernkurven"></svg>
+  <div class="a" style="left:1420px;top:300px;width:440px;display:flex;gap:20px" data-step="1" data-fx="right"><span class="num">1</span><p style="font-size:29px;line-height:1.3"><b>Onboarding-Tal:</b> Setup, Domäne, Prozesse. Tom fühlt sich langsam.</p></div>
+  <div class="a" style="left:1420px;top:500px;width:440px;display:flex;gap:20px" data-step="2" data-fx="right"><span class="num">2</span><p style="font-size:29px;line-height:1.3"><b>Kreuzung:</b> Tägliches Feedback zahlt Zinseszins.</p></div>
+  <div class="a" style="left:1420px;top:660px;width:440px;display:flex;gap:20px" data-step="3" data-fx="right"><span class="num">3</span><p style="font-size:29px;line-height:1.3"><b>Plateau:</b> Ohne Reviews lernt Paula mehr über ihr Thema, aber kaum noch übers Handwerk.</p></div>
+  <p class="a" style="left:1420px;top:880px;width:440px;font-size:24px;color:var(--g3)">Schematische Darstellung, keine Messdaten</p>
+  <svg class="logo"><use href="#exp-logo"/></svg><span class="pn"></span>
+  <aside class="notes"><ul><li>Schematisch, keine Messdaten, aber so erlebt</li><li>Paula (orange) startet steil, baut ab Tag 3</li><li><b>(1)</b> Tom im Onboarding-Tal: Setup, Domäne, Prozesse, fühlt sich langsam</li><li><b>(2)</b> Kreuzung: tägliches Feedback zahlt Zinseszins</li><li><b>(3)</b> Paulas Plateau: mehr übers Thema, kaum mehr übers Engineering</li><li>Lehre: Die Werkstatt braucht Geduld, im Labor muss man sich Feedback aktiv holen</li></ul></aside>
+</section>
+
+<!-- ================= 20 · ENTSCHEIDUNGSHILFE ================= -->
+<section class="slide light" data-title="Was passt zu dir?">
+  <p class="eyebrow">Vergleich</p>
+  <h2 class="title">Was passt zu dir? Wenn du …</h2>
+  <div class="decide" style="top:260px" data-step="1" data-fx="left"><p>… schon weißt, dass du Richtung Forschung oder Abschlussarbeit willst</p><span class="badge A">Labor</span></div>
+  <div class="decide" style="top:370px" data-step="2" data-fx="right"><p>… noch nie mit Code-Reviews und CI/CD gearbeitet hast</p><span class="badge B">Werkstatt</span></div>
+  <div class="decide" style="top:480px" data-step="3" data-fx="left"><p>… dich gut selbst strukturierst und gern allein tüftelst</p><span class="badge A">Labor</span></div>
+  <div class="decide" style="top:590px" data-step="4" data-fx="right"><p>… im Anschluss eine Festanstellung suchst</p><span class="badge B">Werkstatt</span></div>
+  <div class="decide" style="top:700px" data-step="5" data-fx="left"><p>… ein Thema mitbringst, für das du brennst</p><span class="badge A">Labor</span></div>
+  <div class="decide" style="top:810px" data-step="6" data-fx="right"><p>… lernen willst, wie Profis Software im Alltag bauen</p><span class="badge B">Werkstatt</span></div>
+  <svg class="logo"><use href="#exp-logo"/></svg><span class="pn"></span>
+  <aside class="notes"><ul><li>Forschung oder Abschlussarbeit: <b>Labor</b></li><li>Noch nie Reviews und CI/CD: unbedingt <b>Werkstatt</b>, größte Lücke im Bewerbungsgespräch</li><li>Gut selbst strukturiert: <b>Labor</b></li><li>Festanstellung gesucht: <b>Werkstatt</b>, viele lernen euch kennen</li><li>Eigenes Herzensthema: <b>Labor</b></li><li>Lernen, wie Profis arbeiten: <b>Werkstatt</b></li><li>Mein Rat: erstes Praktikum eher Werkstatt, zweites oder Abschlussarbeit gern Labor</li></ul></aside>
+</section>
+
+<!-- ================= 21 · KAPITEL 06 ================= -->
+<section class="slide dark" data-title="06 · Spielregeln">
+  <div class="a sec-top" data-auto="0" data-fx="drop">06</div>
+  <h1 class="a sec-title" data-auto=".25" data-fx="rise">SPIELREGELN</h1>
+  <p class="a sec-sub" data-auto=".55" data-fx="fade">So holst du das Maximum raus, egal auf welchem Weg</p>
+  <div class="a sec-bot" data-auto=".55" data-fx="rise"></div>
+  <aside class="notes"><ul><li>Egal welcher Weg: Ihr könnt viel dafür tun, dass er gut wird</li></ul></aside>
+</section>
+
+<!-- ================= 22 · SECHS REGELN ================= -->
+<section class="slide light" data-title="Sechs Regeln">
+  <p class="eyebrow">Spielregeln</p>
+  <h2 class="title">Sechs Regeln für dein Praktikum</h2>
+  <div class="rule" style="left:60px;top:260px" data-step="1" data-fx="pop"><p class="no">01</p><h3>Ziel am ersten Tag</h3><p>Schreib auf: Was kann ich am Ende, was ich heute noch nicht kann?</p></div>
+  <div class="rule" style="left:670px;top:260px" data-step="2" data-fx="pop"><p class="no">02</p><h3>Mentor:in einfordern</h3><p>Fester Termin, jede Woche, 30 Minuten. Nicht verhandelbar.</p></div>
+  <div class="rule dk" style="left:1280px;top:260px" data-step="3" data-fx="pop"><p class="no">03</p><h3>Jede Woche eine Demo</h3><p>Fünf Minuten reichen. Gegen Einsamkeit im PoC, gegen Unsichtbarkeit im Team.</p></div>
+  <div class="rule" style="left:60px;top:600px" data-step="4" data-fx="pop"><p class="no">04</p><h3>Lerntagebuch führen</h3><p>Was habe ich gelernt, wo hing ich fest? Gold wert fürs nächste Bewerbungsgespräch.</p></div>
+  <div class="rule" style="left:670px;top:600px" data-step="5" data-fx="pop"><p class="no">05</p><h3>KI ja, aber erklärbar</h3><p>Nutze jedes Tool. Aber erkläre jede Zeile, die du einreichst.</p></div>
+  <div class="rule" style="left:1280px;top:600px" data-step="6" data-fx="pop"><p class="no">06</p><h3>Abschluss sichern</h3><p>Präsentation, Zeugnis, Referenzkontakt, Portfolio. NDA vorher klären.</p></div>
+  <svg class="logo"><use href="#exp-logo"/></svg><span class="pn"></span>
+  <aside class="notes"><ul><li><b>1</b> Ziel am ersten Tag aufschreiben</li><li><b>2</b> festen wöchentlichen Mentoring-Termin einfordern</li><li><b>3</b> wichtigste Regel: jede Woche eine Demo. Im Labor gegen Einsamkeit, in der Werkstatt für Sichtbarkeit</li><li><b>4</b> Lerntagebuch: Spickzettel fürs nächste Bewerbungsgespräch</li><li><b>5</b> KI nutzen, aber jede eingereichte Zeile erklären können</li><li><b>6</b> Abschluss sichern: Präsentation, Zeugnis, Referenzkontakt. Früh klären, was ins Portfolio darf</li></ul></aside>
+</section>
+
+<!-- ================= 23 · SWEET SPOT ================= -->
+<section class="slide light" data-title="Sweet Spot: PoC im Team">
+  <p class="eyebrow">Spielregeln</p>
+  <h2 class="title">Der Sweet Spot: der PoC im Team</h2>
+  <div class="a" style="left:450px;top:250px;width:600px;height:600px;border-radius:50%;background:var(--o);mix-blend-mode:multiply" data-auto=".2" data-fx="left"></div>
+  <div class="a" style="left:870px;top:250px;width:600px;height:600px;border-radius:50%;background:var(--n);opacity:.92;mix-blend-mode:multiply" data-auto=".4" data-fx="right"></div>
+  <div class="a" style="left:520px;top:440px;width:320px;display:flex;flex-direction:column;gap:12px;color:var(--n)" data-auto=".8" data-fx="fade">
+    <h3 class="d" style="font-size:36px">Forschungsprojekt</h3>
+    <p style="font-size:29px;line-height:1.35">Freiheit<br>eigene Story<br>neue Technologie</p>
+  </div>
+  <div class="a" style="left:1100px;top:440px;width:320px;display:flex;flex-direction:column;gap:12px;color:#fff" data-auto="1" data-fx="fade">
+    <h3 class="d" style="font-size:36px">Team</h3>
+    <p style="font-size:29px;line-height:1.35">Reviews und CI/CD<br>tägliches Feedback<br>Netzwerk</p>
+  </div>
+  <p class="a d" style="left:830px;top:516px;width:260px;text-align:center;font-size:32px;color:var(--n);background:#fff;border:4px solid var(--o);border-radius:40px;padding:10px 16px;box-shadow:0 8px 32px rgba(0,0,0,.35)" data-step="1" data-fx="pop">Sweet Spot</p>
+  <div class="a chips" style="left:60px;top:885px;width:1800px;justify-content:center;gap:20px" data-step="2" data-fx="rise">
+    <span class="chip" style="font-size:30px;border:none;background:var(--card)">Eigenes Thema</span>
+    <span class="chip" style="font-size:30px;border:none;background:var(--card)">im Team-Repo</span>
+    <span class="chip" style="font-size:30px;border:none;background:var(--card)">mit Code-Reviews</span>
+    <span class="chip" style="font-size:30px;border:none;background:var(--card)">Pairing mit dem Team</span>
+    <span class="chip" style="font-size:30px;border:none;background:var(--card)">Demo im Sprint-Review</span>
+  </div>
+  <svg class="logo"><use href="#exp-logo"/></svg><span class="pn"></span>
+  <aside class="notes"><ul><li>Callback Radar: Die Profile sind komplementär</li><li>Sweet Spot: der PoC im Team</li><li>Eigenes Thema, aber im Team-Repo, mit Reviews, Pairing, Demo im Sprint-Review</li><li>Freiheit und Story aus dem Labor plus Handwerk und Feedback aus der Werkstatt</li><li>Aktiv einfordern: Darf ich ins Team-Repo? Ins Review? Im Sprint-Review demoen?</li><li>Die Antwort ist fast immer ja</li></ul></aside>
+</section>
+
+<!-- ================= 24 · EIN JAHR SPÄTER ================= -->
+<section class="slide dark" data-title="Anekdote: ein Jahr später">
+  <p class="eyebrow">Anekdote · Ein Jahr später</p>
+  <h2 class="a" style="left:60px;top:200px;width:860px;font:300 78px/1.1 var(--ft)">Paula und Tom,<br>ein Jahr später</h2>
+  <div class="story" style="top:430px;border-left:6px solid var(--o)" data-step="1" data-fx="rise"><p class="nm hl">Paula</p><p>Ab Woche 6 hat sie ihren PoC ins Team-Repo gezogen, mit Reviews und Pipeline. Heute ist er ein Feature im Produkt.</p></div>
+  <div class="story" style="top:680px;border-left:6px solid #fff" data-step="2" data-fx="rise"><p class="nm">Tom</p><p>In Woche 9 hat er sein erstes eigenes Feature im Sprint-Review gezeigt. Heute ist er Werkstudent im Team.</p></div>
+  <img class="a illu" src="assets/illu-later.jpg" alt="Comic-Illustration: Paula zeigt ihren Prototyp auf einem Monitor, Tom steht daneben und hält den Daumen hoch" style="left:1130px;top:110px;width:672px;height:840px;object-fit:contain" data-auto=".3" data-fx="scale">
+  <svg class="logo"><use href="#exp-logo"/></svg><span class="pn"></span>
+  <aside class="notes"><ul><li>Paula merkt in Woche 6, dass sie feststeckt, und fragt nach dem Team-Repo</li><li>Mit Reviews und Pipeline. Heute ist ihr Prototyp ein Feature im Produkt</li><li>Tom übersteht das Onboarding-Tal und zeigt in Woche 9 sein erstes Feature im Sprint-Review</li><li>Heute ist er Werkstudent im Team</li><li>Beide landen im Sweet Spot, von verschiedenen Seiten</li></ul></aside>
+</section>
+
+<!-- ================= 25 · KERNBOTSCHAFT ================= -->
+<section class="slide dark" data-title="Kernbotschaft">
+  <div class="a" style="left:0;top:0;width:1920px;height:1080px;overflow:hidden" data-auto="0" data-fx="fade">
+    <img class="kb" src="assets/bg-abstract.jpg" alt="" style="width:100%;height:100%;object-fit:cover">
+  </div>
+  <div class="a" style="left:0;top:0;width:1920px;height:1080px;background:linear-gradient(90deg,rgba(20,20,20,.94) 0%,rgba(20,20,20,.82) 55%,rgba(20,20,20,.15) 100%)"></div>
+  <div class="a" style="left:96px;top:300px;width:140px;height:10px;background:var(--o)" data-auto=".4" data-fx="left"></div>
+  <p class="a d" style="left:96px;top:350px;width:1200px;font-size:74px;line-height:1.15" data-auto=".5" data-fx="rise">Ein Praktikum ist nicht dafür da, dass du Code lieferst.</p>
+  <p class="a d" style="left:96px;top:565px;width:1200px;font-size:74px;line-height:1.15;color:var(--o)" data-step="1" data-fx="rise">Sondern dafür, dass du lernst, wie Software entsteht.</p>
+  <svg class="logo"><use href="#exp-logo"/></svg><span class="pn"></span>
+  <aside class="notes"><ul><li>Wenn ihr euch eine Sache merkt:</li><li>Code liefert die KI in Sekunden</li><li>Ein Praktikum ist dafür da, zu lernen, wie Software entsteht: mit Menschen, Prozessen, Verantwortung</li><li>Labor oder Werkstatt ist zweitrangig</li><li>Holt euch, was euer Weg euch nicht von selbst gibt</li></ul></aside>
+</section>
+
+<!-- ================= 26 · DANKE ================= -->
+<section class="slide light" data-title="Danke">
+  <h1 class="a d" style="left:130px;top:100px;font-size:150px;line-height:1.1;color:var(--o)" data-auto=".1" data-fx="rise">Danke!</h1>
+  <img class="a" src="assets/codeculture.jpg" alt="Cover des Video-Podcasts code culture" style="left:145px;top:363px;width:560px;height:560px;object-fit:cover" data-auto=".4" data-fx="fade">
+  <p class="a" style="left:760px;top:780px;width:380px;font-size:29px;line-height:1.35" data-auto=".6" data-fx="fade">Video-Podcast mit Markus und Lucas über Code, Technews und Nerdkultur</p>
+  <div class="a" style="left:1200px;top:363px;width:660px;height:560px;background:var(--n);border-radius:24px;padding:48px;display:flex;flex-direction:column;gap:24px" data-auto=".8" data-fx="right">
+    <p class="d" style="font-size:44px;color:var(--o)">Praktikum bei EXP?</p>
+    <p style="font-size:31px;line-height:1.35;color:#fff">Sprich mich nach dem Vortrag an oder schreib an <b class="hl">karriere@explore.de</b></p>
+    <div style="display:flex;align-items:center;gap:28px">
+      <img src="assets/qr-karriere.svg" alt="QR-Code zu explore.de/karriere" style="width:200px;height:200px;border-radius:12px;flex:none">
+      <div style="display:flex;flex-direction:column;gap:6px"><p style="font-size:24px;color:var(--g2)">Alle offenen Stellen</p><p class="d" style="font-size:34px;color:#fff">explore.de/karriere</p></div>
+    </div>
+  </div>
+  <svg class="logo"><use href="#exp-logo"/></svg><span class="pn"></span>
+  <aside class="notes"><ul><li>Danke!</li><li>Podcast code culture mit Lucas: Code, Technews, Nerdkultur</li><li>Lust auf ein Praktikum bei EXP? Ansprechen, karriere@explore.de oder explore.de/karriere (QR-Code)</li><li>Fragen?</li></ul></aside>
+</section>
+
+</div><!-- /stage -->
+
+<div id="black"></div>
+<div id="notesbar"></div>
+<div id="help"><div>
+  <p class="d" style="font-size:26px;margin-bottom:12px">Steuerung</p>
+  <p><b>→ / Leertaste</b>nächster Schritt</p>
+  <p><b>←</b>zurück</p>
+  <p><b>Pos1 / Ende</b>erste / letzte Folie</p>
+  <p><b>F</b>Vollbild</p>
+  <p><b>N</b>Sprechernotizen ein/aus</p>
+  <p><b>P</b>Presenter-Ansicht (2. Fenster)</p>
+  <p><b>B</b>Bildschirm schwarz</p>
+  <p><b>Ziffern + Enter</b>zu Folie springen</p>
+  <p><b>?</b>diese Hilfe</p>
+</div></div>
+
+<div id="presenter">
+  <div id="p-cur"></div>
+  <div id="p-side">
+    <div id="p-meta"><span id="p-pos"></span><span id="p-timer" title="Klick: Timer zurücksetzen">00:00</span></div>
+    <p class="p-lbl" id="p-nextlbl">Als Nächstes</p>
+    <div id="p-next"></div>
+    <p class="p-lbl">Notizen</p>
+    <div id="p-notes"></div>
+  </div>
+</div>
+
+<script>
+(() => {
+  const stage = document.getElementById('stage');
+  const slides = [...stage.querySelectorAll('.slide')];
+  const PRESENTER = new URLSearchParams(location.search).has('presenter');
+  const bc = 'BroadcastChannel' in window ? new BroadcastChannel('cookietalks-praktikum') : null;
+  let cur = -1, step = 0, remote = false;
+
+  slides.forEach((s, i) => {
+    s.querySelectorAll('.pn').forEach(p => p.textContent = i + 1);
+    s.steps = Math.max(0, ...[...s.querySelectorAll('[data-step]')].map(e => +e.dataset.step));
+  });
+
+  /* ---------- Skalierung ---------- */
+  function fit() {
+    const box = PRESENTER ? document.getElementById('p-cur').getBoundingClientRect()
+                          : {left: 0, top: 0, width: innerWidth, height: innerHeight};
+    const k = Math.min(box.width / 1920, box.height / 1080);
+    stage.style.transform = `translate(${box.left + (box.width - 1920 * k) / 2}px,${box.top + (box.height - 1080 * k) / 2}px) scale(${k})`;
+    if (PRESENTER) {
+      const nb = document.getElementById('p-next'), mini = nb.querySelector('.mini');
+      if (mini) mini.style.transform = `scale(${nb.clientWidth / 1920})`;
+    }
+  }
+  addEventListener('resize', fit);
+
+  /* ---------- Builds ---------- */
+  function setBuild(s, n) {
+    s.querySelectorAll('[data-step]').forEach(e => { e.style.transitionDelay = '0s'; e.classList.toggle('shown', +e.dataset.step <= n); });
+  }
+  function instant(s, fn) { s.classList.add('noanim'); fn(); void s.offsetWidth; s.classList.remove('noanim'); }
+
+  /* ---------- Navigation ---------- */
+  function goto(n, built = false) {
+    n = Math.max(0, Math.min(slides.length - 1, n));
+    if (n === cur) return;
+    const prev = slides[cur], next = slides[n];
+    instant(next, () => {
+      next.querySelectorAll('[data-auto]').forEach(e => { e.style.transitionDelay = '0s'; e.classList.toggle('shown', built); });
+      step = built ? next.steps : 0;
+      setBuild(next, step);
+    });
+    // Magic Move zwischen benachbarten Folien
+    if (prev && Math.abs(n - cur) === 1) {
+      next.querySelectorAll('[data-magic]').forEach(el => {
+        const o = prev.querySelector(`[data-magic="${el.dataset.magic}"]`);
+        if (!o) return;
+        el.style.transition = 'none';
+        el.style.transform = `translate(${o.offsetLeft - el.offsetLeft}px,${o.offsetTop - el.offsetTop}px)`;
+        void el.offsetWidth;
+        el.style.transition = 'transform 1s cubic-bezier(.65,0,.35,1)';
+        el.style.transform = '';
+      });
+    }
+    if (prev) prev.classList.remove('active');
+    next.classList.add('active');
+    cur = n;
+    if (!built) requestAnimationFrame(() => requestAnimationFrame(() =>
+      next.querySelectorAll('[data-auto]').forEach(e => { e.style.transitionDelay = e.dataset.auto + 's'; e.classList.add('shown'); })));
+    const h = hooks[next.dataset.enter]; if (h) h(next, built);
+    changed();
+  }
+  function nextStep() {
+    const s = slides[cur];
+    if (step < s.steps) { step++; setBuild(s, step); changed(); } else goto(cur + 1);
+  }
+  function prevStep() {
+    const s = slides[cur];
+    if (step > 0) { step--; setBuild(s, step); changed(); } else goto(cur - 1, true);
+  }
+  function changed() {
+    history.replaceState(null, '', location.pathname + location.search + '#' + (cur + 1));
+    document.getElementById('notesbar').innerHTML = slides[cur].querySelector('.notes')?.innerHTML || '';
+    if (PRESENTER) renderPresenter();
+    if (bc && !remote) bc.postMessage({i: cur, step});
+  }
+  if (bc) bc.onmessage = ({data}) => {
+    remote = true;
+    if (data.i !== cur) goto(data.i, data.i < cur);
+    if (data.step !== step) { step = data.step; setBuild(slides[cur], step); changed(); }
+    remote = false;
+  };
+
+  /* ---------- Tastatur & Maus ---------- */
+  let typed = '';
+  addEventListener('keydown', e => {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    const k = e.key;
+    if (/^[0-9]$/.test(k)) { typed += k; return; }
+    if (k === 'Enter' && typed) { goto(+typed - 1); typed = ''; return; }
+    typed = '';
+    if (['ArrowRight', 'ArrowDown', ' ', 'PageDown', 'Enter'].includes(k)) { e.preventDefault(); nextStep(); }
+    else if (['ArrowLeft', 'ArrowUp', 'PageUp', 'Backspace'].includes(k)) { e.preventDefault(); prevStep(); }
+    else if (k === 'Home') goto(0);
+    else if (k === 'End') goto(slides.length - 1, true);
+    else if (k === 'f' || k === 'F') document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
+    else if (k === 'n' || k === 'N') document.body.classList.toggle('show-notes');
+    else if (k === 'b' || k === 'B' || k === '.') document.body.classList.toggle('blackout');
+    else if (k === '?') document.body.classList.toggle('show-help');
+    else if (k === 'Escape') document.body.classList.remove('show-help', 'show-notes', 'blackout');
+    else if ((k === 'p' || k === 'P') && !PRESENTER) window.open(location.pathname + '?presenter#' + (cur + 1), 'presenter', 'width=1400,height=850');
+  });
+  if (!PRESENTER) {
+    stage.addEventListener('click', e => { if (!e.target.closest('.ph-prompt')) nextStep(); });
+    let tx = null;
+    addEventListener('touchstart', e => tx = e.touches[0].clientX, {passive: true});
+    addEventListener('touchend', e => { if (tx === null) return; const dx = e.changedTouches[0].clientX - tx; if (Math.abs(dx) > 50) dx < 0 ? nextStep() : prevStep(); tx = null; });
+    let idle; addEventListener('mousemove', () => { document.body.classList.remove('cursor-hidden'); clearTimeout(idle); idle = setTimeout(() => document.body.classList.add('cursor-hidden'), 2500); });
+  }
+
+  /* ---------- Radar ---------- */
+  const NS = 'http://www.w3.org/2000/svg';
+  function el(parent, tag, attrs, text) {
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    if (text) e.textContent = text;
+    parent.appendChild(e); return e;
+  }
+  const ease3 = t => 1 - Math.pow(1 - t, 3), clamp = t => Math.min(1, Math.max(0, t));
+  function animate(svg, dur, draw, built) {
+    svg._tok = (svg._tok || 0) + 1; const tok = svg._tok;
+    if (built) { draw(99); return; }
+    draw(0); let t0 = null;
+    const f = ts => { if (svg._tok !== tok) return; if (t0 === null) t0 = ts; const t = (ts - t0) / 1000; draw(t); if (t < dur) requestAnimationFrame(f); };
+    requestAnimationFrame(f);
+  }
+  function radar(root, built) {
+    const svg = root.querySelector('.radar');
+    const N = 6, CX = 570, CY = 360, R = 230;
+    const A = [5, 4, 2, 2, 2, 5], B = [2, 2, 5, 5, 5, 3];
+    const LAB = ['Freiheit', 'Sichtbares Ergebnis', 'Handwerk und Qualität', 'Feedback-Frequenz', 'Netzwerk', 'Story für den Lebenslauf'];
+    const P = (i, v) => { const a = -Math.PI / 2 + i * Math.PI / 3; return [CX + Math.cos(a) * R * v / 5, CY + Math.sin(a) * R * v / 5]; };
+    if (!svg._r) {
+      for (let r = 1; r <= 5; r++) el(svg, 'polygon', {points: [...Array(N)].map((_, i) => P(i, r).join(',')).join(' '), fill: 'none', stroke: r === 5 ? '#4D4D4D' : '#2A2A2A', 'stroke-width': r === 5 ? 3 : 2});
+      for (let i = 0; i < N; i++) { const q = P(i, 5); el(svg, 'line', {x1: CX, y1: CY, x2: q[0], y2: q[1], stroke: '#333333', 'stroke-width': 2}); }
+      for (let i = 0; i < N; i++) {
+        const a = -Math.PI / 2 + i * Math.PI / 3, c = Math.cos(a), s = Math.sin(a);
+        const x = CX + c * (R + 40), y = CY + s * (R + 40) + (s < -0.5 ? -4 : s > 0.5 ? 26 : 10);
+        el(svg, 'text', {x, y, class: 'svgl', 'text-anchor': c > 0.3 ? 'start' : c < -0.3 ? 'end' : 'middle'}, LAB[i]);
+      }
+      const pb = el(svg, 'polygon', {fill: 'rgba(255,255,255,.10)', stroke: '#fff', 'stroke-width': 5, 'stroke-dasharray': '14 10', 'stroke-linejoin': 'round'});
+      const pa = el(svg, 'polygon', {fill: 'rgba(255,130,0,.32)', stroke: '#FF8200', 'stroke-width': 6, 'stroke-linejoin': 'round'});
+      const db = A.map(() => el(svg, 'circle', {r: 8, fill: '#fff'})), da = A.map(() => el(svg, 'circle', {r: 10, fill: '#FF8200'}));
+      svg._r = {pa, pb, da, db};
+    }
+    const {pa, pb, da, db} = svg._r;
+    const set = (poly, dots, V, k) => { const pts = V.map((v, i) => { const q = P(i, Math.max(v * k, .02)); dots[i].setAttribute('cx', q[0]); dots[i].setAttribute('cy', q[1]); return q.join(','); }); poly.setAttribute('points', pts.join(' ')); };
+    animate(svg, 3.3, t => { set(pa, da, A, ease3(clamp((t - .4) / 1.4))); set(pb, db, B, ease3(clamp((t - 1.8) / 1.4))); }, built);
+  }
+
+  /* ---------- Lernkurven ---------- */
+  function curve(root, built) {
+    const svg = root.querySelector('.curve');
+    const X0 = 90, Y0 = 590, W = 1180, H = 520, X = w => X0 + w * W / 12, Y = v => Y0 - v * H;
+    const TEAM = [[0,0],[1,.02],[2,.05],[3,.1],[4,.2],[6,.42],[8,.62],[10,.8],[12,.95]];
+    const POC  = [[0,0],[1,.15],[2,.3],[3,.4],[4,.47],[6,.53],[8,.56],[10,.58],[12,.6]];
+    const path = pts => { const p = pts.map(a => [X(a[0]), Y(a[1])]); let d = `M${p[0]}`; for (let i = 0; i < p.length - 1; i++) { const p0 = p[Math.max(0, i - 1)], p1 = p[i], p2 = p[i + 1], p3 = p[Math.min(p.length - 1, i + 2)]; d += ` C${p1[0] + (p2[0] - p0[0]) / 6},${p1[1] + (p2[1] - p0[1]) / 6} ${p2[0] - (p3[0] - p1[0]) / 6},${p2[1] - (p3[1] - p1[1]) / 6} ${p2}`; } return d; };
+    if (!svg._c) {
+      for (let g = 1; g <= 4; g++) el(svg, 'line', {x1: X0, y1: Y(g / 4), x2: X0 + W, y2: Y(g / 4), stroke: '#242424', 'stroke-width': 2});
+      el(svg, 'line', {x1: X0, y1: Y0, x2: X0 + W, y2: Y0, stroke: '#4D4D4D', 'stroke-width': 3});
+      el(svg, 'line', {x1: X0, y1: Y0, x2: X0, y2: Y0 - H, stroke: '#4D4D4D', 'stroke-width': 3});
+      [0, 4, 8, 12].forEach(w => el(svg, 'text', {x: X(w), y: Y0 + 44, class: 'svgs', 'text-anchor': w === 0 ? 'start' : w === 12 ? 'end' : 'middle'}, 'Woche ' + w));
+      el(svg, 'text', {x: 40, y: Y0 - H / 2, class: 'svgs', 'text-anchor': 'middle', transform: `rotate(-90 40 ${Y0 - H / 2})`}, 'Lernzuwachs');
+      const pa = el(svg, 'path', {d: path(POC), fill: 'none', stroke: '#FF8200', 'stroke-width': 8, 'stroke-linecap': 'round'});
+      const pb = el(svg, 'path', {d: path(TEAM), fill: 'none', stroke: '#fff', 'stroke-width': 8, 'stroke-linecap': 'round'});
+      el(svg, 'line', {x1: X0 + 30, y1: 60, x2: X0 + 90, y2: 60, stroke: '#FF8200', 'stroke-width': 8, 'stroke-linecap': 'round'});
+      el(svg, 'text', {x: X0 + 108, y: 70, class: 'svgl'}, 'Labor · Forschungsprojekt');
+      el(svg, 'line', {x1: X0 + 30, y1: 110, x2: X0 + 90, y2: 110, stroke: '#fff', 'stroke-width': 8, 'stroke-linecap': 'round'});
+      el(svg, 'text', {x: X0 + 108, y: 120, class: 'svgl'}, 'Werkstatt · Team');
+      const mk = [[X(2), Y(.05), '1'], [X(7.05), Y(.535), '2'], [X(10.5), Y(.585), '3']].map(m => {
+        const g = el(svg, 'g', {});
+        el(g, 'line', {x1: m[0], y1: m[1] - 22, x2: m[0], y2: m[1] - 6, stroke: '#FF8200', 'stroke-width': 4});
+        el(g, 'circle', {cx: m[0], cy: m[1] - 46, r: 24, fill: '#FF8200'});
+        el(g, 'text', {x: m[0], y: m[1] - 36, 'text-anchor': 'middle', style: 'font:500 28px var(--fd);fill:#141414'}, m[2]);
+        return g;
+      });
+      svg._c = {pa, pb, mk, la: pa.getTotalLength(), lb: pb.getTotalLength()};
+      pa.setAttribute('stroke-dasharray', svg._c.la); pb.setAttribute('stroke-dasharray', svg._c.lb);
+    }
+    const {pa, pb, mk, la, lb} = svg._c, sm = t => t * t * (3 - 2 * t);
+    animate(svg, 5.6, t => {
+      pa.setAttribute('stroke-dashoffset', la * (1 - sm(clamp((t - .3) / 1.8))));
+      pb.setAttribute('stroke-dashoffset', lb * (1 - sm(clamp((t - 1.5) / 2.0))));
+      mk.forEach((g, i) => g.setAttribute('opacity', clamp((t - 3.6 - i * .5) / .4)));
+    }, built);
+  }
+  const hooks = {radar, curve};
+
+  /* ---------- Presenter ---------- */
+  let t0 = Date.now();
+  function renderPresenter() {
+    document.getElementById('p-pos').textContent = `Folie ${cur + 1} / ${slides.length} · Schritt ${step}/${slides[cur].steps}`;
+    document.getElementById('p-notes').innerHTML = slides[cur].querySelector('.notes')?.innerHTML || '';
+    const nb = document.getElementById('p-next'); nb.innerHTML = '';
+    const lbl = document.getElementById('p-nextlbl');
+    const mini = document.createElement('div'); mini.className = 'mini'; nb.appendChild(mini);
+    const s = slides[cur], nxt = slides[cur + 1];
+    let c = null;
+    if (s.steps > step) {
+      // nächster Klick auf derselben Folie: Zustand danach, neue Elemente hervorgehoben
+      c = s.cloneNode(true);
+      c.querySelectorAll('[data-auto]').forEach(e => e.classList.add('shown'));
+      c.querySelectorAll('[data-step]').forEach(e => {
+        const n = +e.dataset.step;
+        e.classList.toggle('shown', n <= step + 1);
+        if (n === step + 1) e.classList.add('nextbuild');
+      });
+      lbl.textContent = `Nächster Klick · ${step + 1}/${s.steps} auf dieser Folie`;
+    } else if (nxt) {
+      c = nxt.cloneNode(true);
+      c.querySelectorAll('[data-step],[data-auto]').forEach(e => e.classList.add('shown'));
+      lbl.textContent = `Nächste Folie · ${cur + 2}: ${nxt.dataset.title || ''}`;
+    } else {
+      lbl.textContent = 'Als Nächstes';
+      mini.innerHTML = '<p style="font:500 70px var(--fd);color:#8C8C8C;padding:80px">Ende</p>';
+    }
+    if (c) {
+      c.classList.add('active', 'noanim');
+      c.querySelectorAll('[data-magic]').forEach(e => e.style.transform = '');
+      c.querySelectorAll('[style*="transition-delay"]').forEach(e => e.style.transitionDelay = '0s');
+      mini.appendChild(c);
+      const hsvg = c.querySelector('svg.radar, svg.curve');
+      if (hooks[c.dataset.enter] && hsvg) { hsvg.innerHTML = ''; hooks[c.dataset.enter](c, true); }
+    }
+    fit();
+  }
+  if (PRESENTER) {
+    document.body.classList.add('presenter');
+    document.title = 'Presenter · ' + document.title;
+    const tm = document.getElementById('p-timer');
+    tm.onclick = () => t0 = Date.now();
+    setInterval(() => { const s = Math.floor((Date.now() - t0) / 1000); tm.textContent = String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0'); }, 500);
+  }
+
+  /* ---------- Druck ---------- */
+  addEventListener('beforeprint', () => slides.forEach(s => { const h = hooks[s.dataset.enter]; if (h) h(s, true); }));
+
+  /* ---------- Start ---------- */
+  fit();
+  const [hs, hst] = location.hash.slice(1).split('.');
+  const start = parseInt(hs, 10);
+  goto(isNaN(start) ? 0 : start - 1, new URLSearchParams(location.search).has('built'));
+  if (hst) { step = Math.min(+hst || 0, slides[cur].steps); setBuild(slides[cur], step); changed(); }
+  document.fonts && document.fonts.ready.then(fit);
+})();
+</script>
+</body>
+</html>

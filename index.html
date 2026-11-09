@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cookie Talks · Markus Herhoffer</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;500&family=Saira:wght@500&display=swap">
+<style>
+@font-face{font-family:"EXP Display";font-weight:500;src:local("NeueDIN-SemiWideMedium"),local("Neue DIN SemiWide Medium")}
+@font-face{font-family:"EXP Text";font-weight:300;src:local("NeueDIN-Light"),local("Neue DIN Light")}
+@font-face{font-family:"EXP Text";font-weight:500;src:local("NeueDIN-Medium"),local("Neue DIN Medium")}
+:root{--o:#FF8200;--k:#141414;--fd:"EXP Display","Saira",Arial,sans-serif;--ft:"EXP Text","Barlow",Arial,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{min-height:100vh;background:var(--k);color:#fff;font:300 20px/1.5 var(--ft);padding:clamp(24px,6vw,96px) clamp(16px,6vw,96px);display:flex;flex-direction:column;gap:48px}
+.bar{width:96px;height:8px;background:var(--o)}
+h1{font:500 clamp(48px,9vw,120px)/1.05 var(--fd);color:var(--o)}
+.sub{font-size:clamp(18px,2vw,24px);color:#BDBDBD;margin-top:12px}
+ul{list-style:none;display:flex;flex-direction:column;gap:16px;max-width:900px}
+a.talk{display:flex;justify-content:space-between;align-items:center;gap:24px;padding:24px 28px;border-left:6px solid var(--o);background:#1F1F1F;border-radius:0 16px 16px 0;color:#fff;text-decoration:none;transition:background .2s,transform .2s}
+a.talk:hover{background:#2A2A2A;transform:translateX(6px)}
+.t{font:500 clamp(20px,2.4vw,28px)/1.2 var(--fd)}
+.m{font-size:16px;color:#8C8C8C;margin-top:4px}
+.go{font:500 28px var(--fd);color:var(--o)}
+footer{margin-top:auto;color:#8C8C8C;font-size:16px}
+</style>
+</head>
+<body>
+  <header>
+    <div class="bar"></div>
+    <h1 style="margin-top:24px">Cookie Talks</h1>
+    <p class="sub">Vorträge von Markus Herhoffer, CTO EXP, bei Neuland e.V.</p>
+  </header>
+  <ul>
+    <li><a class="talk" href="praktikum-sinnvoll-nutzen/">
+      <div><p class="t">Ein Praktikum in der Softwareentwicklung sinnvoll nutzen</p><p class="m">12. November 2026 · Labor oder Werkstatt?</p></div>
+      <span class="go">→</span>
+    </a></li>
+  </ul>
+  <footer>Steuerung im Deck: → weiter, ← zurück, F Vollbild, P Presenter-Ansicht, ? Hilfe</footer>
+</body>
+</html>
