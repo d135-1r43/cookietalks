@@ -4,17 +4,17 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Ein Praktikum in der Softwareentwicklung sinnvoll nutzen · Markus Herhoffer</title>
-<!-- Fallback-Schriften, falls Neue DIN (Adobe Fonts) auf dem Rechner nicht aktiviert ist -->
+<!-- Neue DIN: 1. lokal (Adobe Fonts), 2. von explore.de (braucht CORS-Header dort), 3. Fallback Saira/Barlow -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600&family=Saira:wght@500;600;700&display=swap">
 <style>
 /* ---------- Schriften: Neue DIN über Adobe Fonts (lokal aktiviert) ---------- */
-@font-face{font-family:"EXP Display";font-weight:500;src:local("NeueDIN-SemiWideMedium"),local("Neue DIN SemiWide Medium")}
+@font-face{font-family:"EXP Display";font-weight:500;src:local("NeueDIN-SemiWideMedium"),local("Neue DIN SemiWide Medium"),url("https://explore.de/fonts/NeueDIN-SemiWide-Medium.woff2") format("woff2");font-display:swap}
 @font-face{font-family:"EXP Display";font-weight:600;src:local("NeueDIN-SemiWideSemiBold"),local("Neue DIN SemiWide SemiBold")}
 @font-face{font-family:"EXP Display";font-weight:700;src:local("NeueDIN-SemiWideBold"),local("Neue DIN SemiWide Bold")}
-@font-face{font-family:"EXP Text";font-weight:300;src:local("NeueDIN-Light"),local("Neue DIN Light")}
-@font-face{font-family:"EXP Text";font-weight:400;src:local("NeueDIN-Regular"),local("Neue DIN Regular")}
-@font-face{font-family:"EXP Text";font-weight:500;src:local("NeueDIN-Medium"),local("Neue DIN Medium")}
+@font-face{font-family:"EXP Text";font-weight:300;src:local("NeueDIN-Light"),local("Neue DIN Light"),url("https://explore.de/fonts/NeueDIN-Light.woff2") format("woff2");font-display:swap}
+@font-face{font-family:"EXP Text";font-weight:400;src:local("NeueDIN-Regular"),local("Neue DIN Regular"),url("https://explore.de/fonts/NeueDIN-Regular.woff2") format("woff2");font-display:swap}
+@font-face{font-family:"EXP Text";font-weight:500;src:local("NeueDIN-Medium"),local("Neue DIN Medium"),url("https://explore.de/fonts/NeueDIN-Regular.woff2") format("woff2");font-display:swap}
 @font-face{font-family:"EXP Text";font-weight:600;src:local("NeueDIN-SemiBold"),local("Neue DIN SemiBold")}
 
 /* ---------- CI ---------- */
