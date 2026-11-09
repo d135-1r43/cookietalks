@@ -77,6 +77,10 @@ b,strong{font-weight:500}
 .row-ic{position:absolute;display:flex;align-items:center;gap:48px;font-size:42px;line-height:1.25}
 .row-ic .ic{width:110px;height:110px;color:var(--o);stroke-width:1.2}
 .lst{position:absolute;left:1230px;width:630px;border-left:6px solid var(--o);padding:8px 0 8px 28px;font-size:36px}
+.ib-row{position:absolute;left:1120px;width:740px;display:flex;align-items:center;gap:26px;font-size:36px;color:#fff}
+.ib-row .ic{width:56px;height:56px;color:var(--o);stroke-width:1.6}
+.ib-shimmer{animation:shim 4s ease-in-out infinite alternate}
+@keyframes shim{from{opacity:.12}to{opacity:.28}}
 .colhead{position:absolute;top:250px;display:flex;align-items:center;gap:16px;font:500 36px var(--fd)}
 .colhead .ic{width:46px;height:46px}
 .pc,.cc{position:absolute;width:870px;border-radius:0 16px 16px 0;padding:20px 28px;display:flex;align-items:center;gap:22px;font-size:31px;line-height:1.3;color:var(--n)}
@@ -193,6 +197,12 @@ body.presenter #presenter{display:grid;position:fixed;inset:0;grid-template-colu
 <!-- ======== Symbole: Logo & Icons ======== -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="exp-logo" viewBox="8 86.5 157.3 52.8"><g fill="currentColor"><path d="M46.7,130.3H27.2l0,0H12.2c-2.4,0-4.2,1.9-4.2,4.2l0,0c0,1.2,0.4,2.3,1.2,3c0.8,0.8,1.8,1.2,3,1.2h34.5 c1.1,0,2.1-0.4,3-1.2c0.9-0.8,1.3-1.8,1.3-3c0-1.2-0.4-2.3-1.3-3C48.9,130.7,47.9,130.3,46.7,130.3z"/><path d="M46.7,108.3H27.2l0,0H12.2c-2.4,0-4.2,1.9-4.2,4.2l0,0c0,1.2,0.4,2.3,1.2,3c0.8,0.8,1.8,1.2,3,1.2h34.5 c1.1,0,2.1-0.4,3-1.2c0.9-0.8,1.3-1.8,1.3-3c0-1.2-0.4-2.3-1.3-3C48.9,108.7,47.9,108.3,46.7,108.3z"/><path d="M27.2,94.8L27.2,94.8h19.6c1.1,0,2.1-0.4,3-1.2c0.9-0.8,1.3-1.8,1.3-3s-0.4-2.3-1.3-3 c-0.9-0.8-1.8-1.2-3-1.2H12.2c-1.2,0-2.3,0.4-3,1.2c-0.8,0.8-1.2,1.8-1.2,3l0,0c0,2.4,1.9,4.2,4.2,4.2H27.2z"/><path d="M69.6,139.1c-0.9,0-1.8-0.3-2.7-0.9c-0.9-0.8-1.5-1.7-1.6-2.9c-0.1-1.2,0.2-2.2,0.9-3.2l15.1-19.2 L66.2,93.7c-0.8-0.9-1.1-2-0.9-3.2c0.1-1.2,0.7-2.1,1.6-2.9c0.9-0.8,2-1.1,3.2-0.9c1.2,0.1,2.1,0.7,2.9,1.6L86.7,106l13.9-17.7 c0.8-0.9,1.7-1.5,2.8-1.6c1.1-0.1,2.2,0.2,3.1,0.9c0.9,0.8,1.5,1.7,1.6,2.9c0.1,1.2-0.2,2.2-0.9,3.2l-15,19.2l15,19.2 c0.8,0.9,1.1,2,0.9,3.2s-0.7,2.2-1.6,2.9c-0.9,0.8-2,1.1-3.1,0.9c-1.1-0.1-2.1-0.7-2.8-1.6l-13.9-17.7L73,137.5 C72.1,138.6,71,139.1,69.6,139.1z"/><path d="M164,96c-0.8-1.8-1.9-3.4-3.3-4.8c-1.4-1.4-3-2.5-4.9-3.3c-1.8-0.8-3.8-1.2-5.9-1.2h-23.3 c-1.2,0-2.2,0.4-3,1.2c-0.8,0.8-1.2,1.8-1.2,3l0,0l0,0l0,0c0,2.3,1.9,4.2,4.2,4.2h4.2h11.7h7.3c1.9,0,3.5,0.6,4.7,1.9 c1.3,1.3,1.9,2.8,1.9,4.7c0,1.9-0.6,3.5-1.9,4.8c-1.3,1.3-2.8,2-4.7,2h-7.3h-11.7l0,0c-4.7,0-8.5,3.8-8.5,8.5v17.7 c0,1.2,0.4,2.2,1.2,3c0.8,0.8,1.8,1.2,3,1.2c1.2,0,2.2-0.4,3-1.2c0.8-0.8,1.2-1.8,1.2-3V119c0-1,0.8-1.8,1.8-1.8h17.2 c2.1,0,4-0.4,5.9-1.2c1.8-0.8,3.5-1.9,4.9-3.3c1.4-1.4,2.5-3,3.3-4.8c0.8-1.8,1.2-3.8,1.2-6C165.2,99.8,164.8,97.9,164,96z"/></g></symbol>
+  <symbol id="i-clip" viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="17" rx="1.5"/><path d="M9 4V2.8h6V4M8.5 9.5h7M8.5 13.5h7M8.5 17.5h4"/></symbol>
+  <symbol id="i-code" viewBox="0 0 24 24"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5M14 4l-4 16"/></symbol>
+  <symbol id="i-bug" viewBox="0 0 24 24"><rect x="8" y="7" width="8" height="12" rx="4"/><path d="M12 7V5M9.5 5.5L8 4M14.5 5.5L16 4M8 11H4M8 15H4M16 11h4M16 15h4M12 11v8"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 12.5l9 5 9-5"/><path d="M3 16.5l9 5 9-5"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H10l-6 4z"/><path d="M8 9.5h8M8 12.5h5"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></symbol>
   <symbol id="i-check" viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></symbol>
   <symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 3.5L22 20H2z"/><path d="M12 10v4.5"/><path d="M12 17.3v.2"/></symbol>
   <symbol id="i-up" viewBox="0 0 24 24"><path d="M7 10v10H3V10z"/><path d="M7 10l4-7c1.7 0 2.7 1.2 2.4 2.8L12.8 9H19a2 2 0 0 1 2 2.3l-1.3 7a2 2 0 0 1-2 1.7H7"/></symbol>
@@ -291,109 +301,46 @@ body.presenter #presenter{display:grid;position:fixed;inset:0;grid-template-colu
 
 <!-- ================= 6 · EISBERG ================= -->
 <section class="slide dark" data-title="Eisberg: unter der Wasserlinie">
+  <svg class="a" style="left:0;top:0" width="1920" height="1080" viewBox="0 0 1920 1080" aria-label="Eisberg">
+    <defs>
+      <pattern id="ib-dots" width="16" height="16" patternUnits="userSpaceOnUse"><circle cx="4" cy="4" r="1.6" fill="#fff"/><circle cx="12" cy="11" r="1.1" fill="#fff"/></pattern>
+      <linearGradient id="ib-dfade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+      <mask id="ib-dmask"><rect x="0" y="422" width="1920" height="120" fill="url(#ib-dfade)"/></mask>
+    </defs>
+    <rect x="0" y="420" width="1920" height="660" fill="#1F1F1F"/>
+    <rect class="ib-shimmer" x="0" y="422" width="1920" height="120" fill="url(#ib-dots)" opacity=".22" mask="url(#ib-dmask)"/>
+    <g class="bob" data-auto=".2" data-fx="rise">
+      <!-- Körper unter Wasser -->
+      <polygon points="580,422 960,422 940,480 950,560 920,680 880,800 840,900 800,1000 775,1062 740,990 690,880 640,760 610,640 585,560 600,500" fill="#E87600"/>
+      <polygon points="580,422 640,430 650,520 610,640 585,560 600,500" fill="#B85C00"/>
+      <polygon points="640,430 700,430 720,560 690,700 700,820 670,760 650,620" fill="#FF9A33"/>
+      <polygon points="720,430 830,430 800,520 830,640 780,760 760,900 740,780 760,640 720,540" fill="#FF8200"/>
+      <polygon points="850,430 950,430 940,520 900,600 880,720 850,640 870,540" fill="#B85C00"/>
+      <polygon points="880,720 900,600 920,680 880,800 840,900 800,1000 810,880" fill="#D96E00"/>
+      <polygon points="700,820 760,900 775,1062 740,990" fill="#8A4500"/>
+      <polygon points="600,500 628,525 612,565" fill="#8A4500"/>
+      <polygon points="940,480 922,530 948,556" fill="#8A4500"/>
+      <polygon points="830,640 850,640 880,720 810,880 780,760" fill="#C96400"/>
+      <!-- Spitze über Wasser -->
+      <polygon points="583,420 640,352 690,320 735,275 760,420" fill="#D6D6D6"/>
+      <polygon points="735,275 770,256 806,298 790,420 760,420" fill="#FFFFFF"/>
+      <polygon points="806,298 852,326 906,378 957,420 790,420" fill="#BDBDBD"/>
+      <polygon points="770,262 790,290 775,330 755,300" fill="#F2F2F2"/>
+      <polygon points="820,322 848,352 832,368" fill="#FFFFFF"/>
+      <polygon points="668,372 700,345 690,392" fill="#F2F2F2"/>
+    </g>
+    <line x1="0" y1="420" x2="1920" y2="420" stroke="#BDBDBD" stroke-width="2"/>
+  </svg>
   <p class="eyebrow">Ausgangslage</p>
   <h2 class="title">Junior-Code schreibt heute die KI.<br>Gelernt wird unter der Wasserlinie.</h2>
-  <svg class="a" style="left:60px;top:260px;overflow:visible" width="1100" height="780" viewBox="0 0 1100 780" data-auto=".2" data-fx="fade" aria-label="Eisberg">
-    <defs>
-      <linearGradient id="g-water" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2B2B2B"/><stop offset=".55" stop-color="#1C1C1C"/><stop offset="1" stop-color="#141414"/></linearGradient>
-      <linearGradient id="g-fog" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#141414" stop-opacity="0"/><stop offset=".35" stop-color="#141414" stop-opacity=".12"/><stop offset=".75" stop-color="#141414" stop-opacity=".6"/><stop offset="1" stop-color="#141414" stop-opacity=".97"/></linearGradient>
-      <linearGradient id="g-ray" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".09"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
-      <linearGradient id="g-surf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".16"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
-      <linearGradient id="g-sheen" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".22"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/></linearGradient>
-      <linearGradient id="g-hfade" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".14" stop-color="#fff"/><stop offset=".86" stop-color="#fff"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
-      <mask id="m-fade" maskUnits="userSpaceOnUse" x="-200" y="0" width="1500" height="800"><rect x="0" y="0" width="1100" height="800" fill="url(#g-hfade)"/></mask>
-      <radialGradient id="g-halo" cx="585" cy="110" r="260" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#FF8200" stop-opacity=".28"/><stop offset="1" stop-color="#FF8200" stop-opacity="0"/></radialGradient>
-      <radialGradient id="g-deep" cx="590" cy="470" r="420" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#FF8200" stop-opacity=".16"/><stop offset="1" stop-color="#FF8200" stop-opacity="0"/></radialGradient>
-    </defs>
-
-    <!-- Himmel-Glühen hinter der Spitze -->
-    <circle class="glow" cx="585" cy="110" r="260" fill="url(#g-halo)"/>
-
-    <!-- Wasser + Lichtstrahlen -->
-    <g mask="url(#m-fade)">
-    <rect x="0" y="170" width="1100" height="610" fill="url(#g-water)"/>
-    <rect x="0" y="170" width="1100" height="610" fill="url(#g-deep)"/>
-    <polygon class="ray" points="140,172 230,172 110,780 -40,780" fill="url(#g-ray)"/>
-    <polygon class="ray r2" points="300,172 350,172 330,780 230,780" fill="url(#g-ray)"/>
-    <polygon class="ray r3" points="900,172 990,172 1120,780 960,780" fill="url(#g-ray)"/>
-    <polygon class="ray r4" points="1010,172 1050,172 1140,780 1080,780" fill="url(#g-ray)"/>
-    </g>
-
-    <g class="bob">
-      <!-- Unter Wasser: facettierter Körper -->
-      <g stroke="#fff" stroke-opacity=".10" stroke-width="1.2" stroke-linejoin="round">
-        <polygon points="430,172 600,172 560,260" fill="#FF8200"/>
-        <polygon points="600,172 760,172 700,300" fill="#E87600"/>
-        <polygon points="600,172 700,300 560,260" fill="#FF9A33"/>
-        <polygon points="430,172 560,260 360,240" fill="#D96E00"/>
-        <polygon points="360,240 560,260 460,420" fill="#E87600"/>
-        <polygon points="360,240 460,420 300,360" fill="#B85C00"/>
-        <polygon points="560,260 700,300 640,450" fill="#FF8200"/>
-        <polygon points="560,260 640,450 460,420" fill="#D96E00"/>
-        <polygon points="760,172 840,280 700,300" fill="#B85C00"/>
-        <polygon points="840,280 880,410 760,470" fill="#8A4500"/>
-        <polygon points="840,280 760,470 700,300" fill="#D96E00"/>
-        <polygon points="700,300 760,470 640,450" fill="#B85C00"/>
-        <polygon points="300,360 460,420 320,500" fill="#8A4500"/>
-        <polygon points="320,500 460,420 400,620" fill="#B85C00"/>
-        <polygon points="460,420 640,450 560,600" fill="#D96E00"/>
-        <polygon points="460,420 560,600 400,620" fill="#8A4500"/>
-        <polygon points="640,450 760,470 560,600" fill="#B85C00"/>
-        <polygon points="760,470 880,410 850,560" fill="#5C2E00"/>
-        <polygon points="760,470 850,560 760,690" fill="#8A4500"/>
-        <polygon points="560,600 760,470 760,690" fill="#7A3D00"/>
-        <polygon points="400,620 560,600 520,720" fill="#5C2E00"/>
-        <polygon points="560,600 640,745 520,720" fill="#4A2500"/>
-        <polygon points="560,600 760,690 640,745" fill="#5C2E00"/>
-      </g>
-      <polygon points="430,172 760,172 840,280 880,410 850,560 760,690 640,745 520,720 400,620 320,500 300,360 360,240" fill="url(#g-sheen)"/>
-
-      <!-- Über Wasser: Spitze -->
-      <g stroke="#141414" stroke-opacity=".12" stroke-width="1" stroke-linejoin="round">
-        <polygon points="450,170 520,95 560,170" fill="#E6E6E6"/>
-        <polygon points="520,95 585,28 560,170" fill="#FFFFFF"/>
-        <polygon points="585,28 640,85 610,170 560,170" fill="#D6D6D6"/>
-        <polygon points="640,85 690,120 720,170 610,170" fill="#BDBDBD"/>
-        <polygon points="520,95 585,28 548,92" fill="#FFFFFF"/>
-      </g>
-      <path class="twinkle" d="M585 6 L589 24 L607 28 L589 32 L585 50 L581 32 L563 28 L581 24 Z" fill="#fff"/>
-    </g>
-
-    <!-- Tiefe, Oberfläche, Blasen -->
-    <g mask="url(#m-fade)">
-    <rect x="0" y="172" width="1100" height="608" fill="url(#g-fog)"/>
-    <rect x="0" y="172" width="1100" height="46" fill="url(#g-surf)"/>
-    <g fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="2">
-      <circle class="bub" cx="420" cy="690" r="5"/>
-      <circle class="bub b2" cx="520" cy="740" r="3.5"/>
-      <circle class="bub b3" cx="700" cy="720" r="6"/>
-      <circle class="bub b4" cx="830" cy="620" r="4"/>
-      <circle class="bub b5" cx="360" cy="720" r="3"/>
-      <circle class="bub b6" cx="620" cy="770" r="4.5"/>
-    </g>
-    <g class="wave2"><path d="M-200 168 q50 -10 100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="2"/></g>
-    <g class="wave"><path d="M0 172 q50 -14 100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0" fill="none" stroke="#FF8200" stroke-width="4"/></g>
-    </g>
-
-    <!-- Verbindungslinien zu Label & Liste -->
-    <line x1="700" y1="118" x2="758" y2="58" stroke="#BDBDBD" stroke-width="2" stroke-dasharray="2 7" stroke-linecap="round"/>
-    <g stroke="#FF8200" stroke-width="2" stroke-dasharray="2 8" stroke-linecap="round" stroke-opacity=".7">
-      <g data-step="1" data-fx="fade"><line x1="808" y1="219" x2="1100" y2="219"/><circle cx="797" cy="219" r="6" fill="#FF8200" stroke="none"/></g>
-      <g data-step="2" data-fx="fade"><line x1="858" y1="299" x2="1100" y2="299"/><circle cx="846" cy="299" r="6" fill="#FF8200" stroke="none"/></g>
-      <g data-step="3" data-fx="fade"><line x1="882" y1="379" x2="1100" y2="379"/><circle cx="870" cy="379" r="6" fill="#FF8200" stroke="none"/></g>
-      <g data-step="4" data-fx="fade"><line x1="882" y1="459" x2="1100" y2="459"/><circle cx="870" cy="459" r="6" fill="#FF8200" stroke="none"/></g>
-      <g data-step="5" data-fx="fade"><line x1="866" y1="539" x2="1100" y2="539"/><circle cx="854" cy="539" r="6" fill="#FF8200" stroke="none"/></g>
-      <g data-step="6" data-fx="fade"><line x1="821" y1="619" x2="1100" y2="619"/><circle cx="809" cy="619" r="6" fill="#FF8200" stroke="none"/></g>
-    </g>
-  </svg>
-  <p class="a" style="left:830px;top:290px;width:420px;font-size:33px;line-height:1.25" data-auto=".7" data-fx="fade"><b>Code tippen</b><br><span style="color:var(--g2)">übernimmt zunehmend die KI</span></p>
-  <p class="a" style="left:84px;top:446px;font-size:24px;letter-spacing:3px;text-transform:uppercase;color:var(--g3)" data-auto=".9" data-fx="fade">unter der Wasserlinie</p>
-  <p class="lst" style="top:450px" data-step="1" data-fx="left">Anforderungen verstehen</p>
-  <p class="lst" style="top:530px" data-step="2" data-fx="left">Fremden Code lesen und reviewen</p>
-  <p class="lst" style="top:610px" data-step="3" data-fx="left">Debuggen im echten System</p>
-  <p class="lst" style="top:690px" data-step="4" data-fx="left">Architektur-Entscheidungen abwägen</p>
-  <p class="lst" style="top:770px" data-step="5" data-fx="left">Im Team kommunizieren</p>
-  <p class="lst" style="top:850px" data-step="6" data-fx="left">Verantwortung für Produktion tragen</p>
+  <div class="a" style="left:60px;top:300px;width:480px" data-auto=".6" data-fx="left"><p class="d" style="font-size:46px;line-height:1.1">Code tippen</p><p style="font-size:29px;color:var(--g2);margin-top:6px">übernimmt zunehmend die KI</p></div>
+  <div class="a" style="left:60px;top:470px;width:480px" data-auto=".9" data-fx="left"><p class="d" style="font-size:46px;line-height:1.1;color:var(--o)">Alles darunter</p><p style="font-size:29px;color:var(--g2);margin-top:6px">lernst du nur in der Praxis</p></div>
+  <div class="ib-row" style="top:470px" data-step="1" data-fx="left"><svg class="ic"><use href="#i-clip"/></svg><p>Anforderungen verstehen</p></div>
+  <div class="ib-row" style="top:552px" data-step="2" data-fx="left"><svg class="ic"><use href="#i-code"/></svg><p>Fremden Code lesen und reviewen</p></div>
+  <div class="ib-row" style="top:634px" data-step="3" data-fx="left"><svg class="ic"><use href="#i-bug"/></svg><p>Debuggen im echten System</p></div>
+  <div class="ib-row" style="top:716px" data-step="4" data-fx="left"><svg class="ic"><use href="#i-layers"/></svg><p>Architektur-Entscheidungen abwägen</p></div>
+  <div class="ib-row" style="top:798px" data-step="5" data-fx="left"><svg class="ic"><use href="#i-chat"/></svg><p>Im Team kommunizieren</p></div>
+  <div class="ib-row" style="top:880px" data-step="6" data-fx="left"><svg class="ic"><use href="#i-shield"/></svg><p>Verantwortung für Produktion tragen</p></div>
   <svg class="logo"><use href="#exp-logo"/></svg><span class="pn"></span>
   <aside class="notes"><ul><li>Callback letzter Vortrag: Copiloten leisten heute die Arbeit eines leicht unterdurchschnittlichen Juniors</li><li>Die Spitze, Code tippen, ist nicht mehr der Grund, euch einzustellen</li><li>Unter der Wasserlinie: Anforderungen, fremden Code lesen, debuggen, Architektur, Kommunikation, Verantwortung</li><li>Lernt man nicht aus Tutorials, nur in der Praxis</li><li>Das Praktikum ist der Ort dafür, wenn ihr es richtig nutzt</li></ul></aside>
 </section>
